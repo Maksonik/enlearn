@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+</head>
+<body>
+<ul class="nav bg-dark p-2" >
+    <li class="nav-item flex-grow-1">
+        <a class="nav-link link-light text-center" href="/">Главная</a>
+    </li>
+    <li class="nav-item w-75 flex-grow-1">
+        <form class="form-inline">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Поиск">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-success btn-outline-secondary" type="submit">Искать</button>
+                </div>
+            </div>
+        </form>
+    </li>
+    {% if not request.user.is_authenticated %}
+        <li class="nav-item flex-grow-1 text-center">
+            <a class="nav-link link-light" href="{% url 'login' %}">Войти</a>
+        </li>
+    {% else %}
+        <li class="nav-item flex-grow-1 text-center">
+            <a class="nav-link link-light" href="{% url 'login' %}">Профиль</a>
+        </li>
+        <li class="nav-item flex-grow-1 text-center">
+            <a class="nav-link link-light" href="{% url 'logout' %}">Выйти</a>
+        </li>
+    {% endif %}
+</ul>
+{% block content %}
+{% endblock %}
+</body>
+</html>
