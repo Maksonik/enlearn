@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}{{word.title}}{% endblock %}
+
+{% block content %}
+    {{word.title}}
+    </br>
+    {% for description in word.description%}
+        {{description}}
+    {% endfor %}
+{% endblock %}
