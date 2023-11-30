@@ -3,9 +3,12 @@
 {% block title %}{{word.title}}{% endblock %}
 
 {% block content %}
-    {{word.title}}
+    {{word.name}}
+    {{ word.rank }}
+    {{ word.short_description }}
     </br>
-    {% for description in word.description%}
-        {{description}}
+    {% for description in word.descriptions%}
+        {{description.part_of_speech}} {{description.meaning}} {{description.translate}}
+        </br>
     {% endfor %}
 {% endblock %}

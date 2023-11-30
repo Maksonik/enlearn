@@ -1,7 +1,6 @@
 from django.urls import path, include
-from . import views
+from .views import word_detail
 
 urlpatterns = [
-    path('<str:title>', views.WordDetail, name='detail_word'),
+    path('<str:name>/', word_detail, name='word_detail'),
 ]
-
