@@ -1,40 +1,60 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>{% block title %}{% endblock %}</title>
     {% load bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
 </head>
+
 <body>
-<ul class="nav bg-dark p-2" >
-    <li class="nav-item flex-grow-1">
-        <a class="nav-link link-light text-center" href="/">Главная</a>
-    </li>
-    <li class="nav-item w-75 flex-grow-1">
-        <form class="form-inline">
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="Поиск">
-                <div class="input-group-append">
-                    <button class="btn btn-outline-success btn-outline-secondary" type="submit">Искать</button>
+    <ul class="nav bg-dark p-2 flex-nowrap">
+        <li class="nav-item flex-grow-1">
+            <a class="nav-link link-light text-center" href="/">Главная</a>
+        </li>
+        <li class="nav-item w-50 flex-grow-1">
+            <form id="searchForm" method="get" action="{% url 'words:word_detail' %}">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Поиск" name="word" id="word">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-success btn-outline-secondary" type="submit">Искать</button>
+                    </div>
                 </div>
-            </div>
-        </form>
-    </li>
-    {% if not request.user.is_authenticated %}
+            </form>
+        </li>
+        {% if not request.user.is_authenticated %}
         <li class="nav-item flex-grow-1 text-center">
             <a class="nav-link link-light" href="{% url 'login' %}">Войти</a>
         </li>
-    {% else %}
+        {% else %}
         <li class="nav-item flex-grow-1 text-center">
-            <a class="nav-link link-light" href="{% url 'login' %}">Профиль</a>
+            <a class="nav-link link-light" href="/">Профиль</a>
+        </li>
+        <li class="nav-item flex-grow-1 text-center">
+            <a class="nav-link link-light" href="/">Упражения</a>
         </li>
         <li class="nav-item flex-grow-1 text-center">
             <a class="nav-link link-light" href="{% url 'logout' %}">Выйти</a>
         </li>
-    {% endif %}
-</ul>
-{% block content %}
-{% endblock %}
+        {% endif %}
+    </ul>
+    {% block content %}
+    {% endblock %}
 </body>
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        {% block domready %}
+        {% endblock %}
+    })
+</script>
 </html>

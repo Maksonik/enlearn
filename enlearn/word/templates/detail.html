@@ -3,12 +3,154 @@
 {% block title %}{{word.title}}{% endblock %}
 
 {% block content %}
-    {{word.name}}
-    {{ word.rank }}
-    {{ word.short_description }}
-    </br>
-    {% for description in word.descriptions%}
-        {{description.part_of_speech}} {{description.meaning}} {{description.translate}}
-        </br>
-    {% endfor %}
+<div class="main">
+    <div class="block">
+        <div class="word">
+            <span class="name">{{ word.name|title }} <sub>{{ word.rank }}</sub></span>
+        </div>
+        <div>
+            <span class="short-description">{{ word.short_description }}</span>
+        </div>
+        <hr>
+        <div class="d-flex flex-row">
+            {% for sound in word.sounds %}
+            <div class="sound flex-grow-1">
+                <p class="transcription">{{sound.transcription}}</p>
+                <audio src="{{sound.sound}}" controls="controls">Слушать</audio>
+            </div>
+            {% endfor %}
+        </div>
+        <hr>
+        <p>Формы слова:</p>
+        <div class="d-flex flex-row m-3 ">
+            {% with verb_forms=word.forms %}
+            {% if verb_forms|length > 0 %}
+            <div class="verb-block flex-grow-1 ">
+                <p>verb</p>
+                {% for form in verb_forms %}
+                {% if form.part_of_speech == 'verb' %}
+                <div>
+                    <span class="grey">{{ form.condition }}</span>
+                    <span>{{ form.value }}</span>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+            {% with noun_forms=word.forms %}
+            {% if noun_forms|length > 0 %}
+            <div class="noun-block flex-grow-1">
+                <p>noun</p>
+                {% for form in noun_forms %}
+                {% if form.part_of_speech == 'noun' %}
+                <div>
+                    <span class="grey">{{ form.condition }}</span>
+                    <span>{{ form.value }}</span>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+            {% with adjectival_forms=word.forms %}
+            {% if adjectival_forms|length > 0 %}
+            <div class="adjectival-block flex-grow-1">
+                <p>adjectival</p>
+                {% for form in adjectival_forms %}
+                {% if form.part_of_speech == 'adjectival' %}
+                <div>
+                    <span class="grey">{{ form.condition }}</span>
+                    <span>{{ form.value }}</span>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+        </div>
+        <hr>
+        {% for part_of_speech, description in descriptions.items%}
+        <div class="meaning">
+            <p class="m-2 part-of-speech">{{ part_of_speech }}</p>
+            {% for general_meaning, deep_meaning in description.items%}
+            {% if forloop.counter > 10 %}
+            <div class="general-meaning hidden"> <span>{{ general_meaning }}</span>
+                {% for meaning in deep_meaning %}
+                {% if meaning.0 %}
+                <div class="deep-meaning hidden">  {{ meaning.0 }} — <span class="grey">{{ meaning.1 }}</span></div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="general-meaning "> <span>{{ general_meaning }}</span>
+                {% for meaning in deep_meaning %}
+                {% if meaning.0 %}
+                <div class="deep-meaning hidden">  {{ meaning.0 }} — <span class="grey">{{ meaning.1 }}</span></div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endfor %}
+             {% if description.items|length > 10 %}
+            <span class="more">Ещё {{description.items|length|add:-10}}</span>
+            {% endif %}
+        </div>
+        {% endfor %}
+        <hr>
+        <p>Словосочетания:</p>
+        {% for phrase in word.phrases%}
+        <div>
+            <span class="phrase">{{phrase.phrase}}</span> - <span class="grey">{{phrase.translate}}</span>
+        </div>
+        {% endfor %}
+        <hr>
+        <p>Примеры с переводом:</p>
+        {% for example in word.examples|slice:":15"%}
+        <div>
+            <p class="example"><span class="sentense">{{example.example}} </span>
+                <br>
+                <span class="translate">{{example.translate}}</span>
+            </p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block domready %}
+    const generalMeanings = document.querySelectorAll('div.general-meaning')
+    for (let generalMeaning of generalMeanings){
+        const deepMeanings = generalMeaning.querySelectorAll('.deep-meaning')
+        if (deepMeanings.length != 0) {
+            let span = generalMeaning.querySelector('span')
+            span.style.cursor = 'pointer'
+            span.style.textDecoration = "UnderLine #838383"
+            span.addEventListener('click', () => {
+                for (let deepMeaning of deepMeanings) {
+                    deepMeaning.classList.toggle('hidden')
+                }
+            })
+    }
+}
+
+    const buttonsMore = document.querySelectorAll('span.more')
+    for (let button of buttonsMore) {
+        button.style.cursor = 'pointer'
+        const text = button.textContent
+        const meaning = button.closest('.meaning')
+        const generalMeaningsHidden = meaning.querySelectorAll('.general-meaning.hidden')
+        button.addEventListener('click', () => {
+            for (generalMeaningHidden of generalMeaningsHidden) {
+                generalMeaningHidden.classList.toggle('hidden')  
+            }
+        if ( button.textContent == 'Свернуть'){
+            button.textContent = text
+        } else {
+            button.textContent = 'Свернуть'
+        }
+        })
+    }
+
+
 {% endblock %}

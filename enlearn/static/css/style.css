@@ -1,0 +1,94 @@
+body {
+    font-family: 'Rubik', sans-serif;
+    cursor: default;
+}
+
+
+.main {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    background-color: #e9e9e9;
+}
+
+.block {
+    padding: 90px;
+    padding-top: 150px;
+    width: 1000px;
+    background-color: white;
+}
+
+.word {
+    margin-bottom: 10px;
+}
+
+.more {
+    color: firebrick;
+}
+
+sub {
+    vertical-align: super;
+    color: grey;
+    font-size: 18px;
+    font-weight: 400;
+}
+
+.name {
+    font-size: 40px;
+    font-weight: 400;
+}
+
+.short-description {
+    font-style: italic;
+}
+
+.sound {
+    margin-top: 10px;
+}
+
+.transcription {
+    font-family: 'transcription';
+    font-size: 19px;
+}
+
+.part-of-speech {
+    font-size: 18px;
+}
+
+.general-meaning {
+    margin-left: 15px;
+    margin-bottom: 5px;
+}
+
+.general-meaning > span::before {
+    content: '- ';
+}
+
+.deep-meaning {
+    margin-left: 35px;
+}
+
+.phrase {
+    margin-left: 15px;
+}
+
+.example {
+    margin-left: 15px;
+}
+
+.sentense {
+    font-size: 18px;
+}
+
+.translate {
+    font-size: 15px;
+    font-style: italic;
+}
+
+.grey {
+    color: grey;
+}
+
+.hidden {
+    display: none;
+}

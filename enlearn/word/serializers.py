@@ -1,6 +1,6 @@
 # serializers.py
 from rest_framework import serializers
-from .models import Word, Description, Sound, Phrase, Form
+from .models import Word, Description, Sound, Phrase, Form, Example
 
 
 class SoundSerializer(serializers.ModelSerializer):
@@ -24,7 +24,34 @@ class FormSerializer(serializers.ModelSerializer):
 class DescriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Description
-        fields = ['part_of_speech', 'meaning', 'translate']
+        fields = ['part_of_speech', 'general_meaning', 'deep_meaning', 'translate']
+
+
+class WordSerializerExample(serializers.ModelSerializer):
+    class Meta:
+        model = Word
+        fields = ['name', 'short_description', 'rank']
+
+
+class ExampleSerializer(serializers.ModelSerializer):
+    words = WordSerializerExample(many=True, required=False)
+
+    class Meta:
+        model = Example
+        fields = ['example', 'translate', 'words']
+
+    def create(self, validated_data):
+        example = Example.objects.create(**validated_data)
+
+        for word in validated_data['example'].split(' '):
+            word = word.strip(',/!&?."\\ ').lower()
+            try:
+                obj = Word.objects.get(name=word)
+                example.words.add(obj)
+            except Word.DoesNotExist:
+                continue
+
+        return example
 
 
 class WordSerializer(serializers.ModelSerializer):
@@ -32,10 +59,11 @@ class WordSerializer(serializers.ModelSerializer):
     sounds = SoundSerializer(many=True)
     phrases = PhraseSerializer(many=True)
     forms = FormSerializer(many=True)
+    examples = ExampleSerializer(many=True, read_only=True)
 
     class Meta:
         model = Word
-        fields = ['name', 'short_description','rank', 'descriptions', 'sounds', 'phrases', 'forms']
+        fields = ['name', 'short_description', 'rank', 'descriptions', 'sounds', 'phrases', 'forms', 'examples']
 
     def create(self, validated_data):
         '''
@@ -61,4 +89,3 @@ class WordSerializer(serializers.ModelSerializer):
             word.forms.add(Form.objects.create(word=word, **form_data))
 
         return word
-

@@ -7,14 +7,15 @@ from word import views
 
 router = DefaultRouter()
 router.register(r'words', views.WordViewSet)
+router.register(r'examples', views.ExampleViewSet)
 
-urlpatterns = ([
+urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('account.urls')),
-    path('words/', include('word.urls')),
+    path('words/', include('word.urls', namespace='words')),
     path('api/v1/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-] )
+]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,
