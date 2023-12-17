@@ -7,6 +7,9 @@
     <div class="block">
         <div class="word">
             <span class="name">{{ word.name|title }} <sub>{{ word.rank }}</sub></span>
+            <div class="learning">
+                Изучать
+            </div>
         </div>
         <div>
             <span class="short-description">{{ word.short_description }}</span>
@@ -133,6 +136,7 @@
             })
     }
 }
+
 
     const buttonsMore = document.querySelectorAll('span.more')
     for (let button of buttonsMore) {

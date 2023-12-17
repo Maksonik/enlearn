@@ -1,21 +1,13 @@
 import os
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-#jcm3+3efsd&1pq)9)+0u9r_-a1us8^ue-6rr2n)6&@z^n2d38'
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
-# Application definition
 
 INSTALLED_APPS = [
     'account.apps.AccountConfig',
@@ -25,12 +17,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'debug_toolbar',
     'word.apps.WordConfig',
+    'learning.apps.LearningConfig',
     'bootstrap5',
     'rest_framework',
 ]
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -38,6 +33,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
 
 ROOT_URLCONF = 'enlearn.urls'
@@ -62,9 +58,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'enlearn.wsgi.application'
 
-# Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -75,8 +68,6 @@ DATABASES = {
         'PORT': '',
     }
 }
-# Password validation
-# https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -105,23 +96,20 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
-STATIC_URL = '/static/'
 
+STATIC_URL = 'static/'
 
-MEDIA_ROOT = os.path.join(BASE_DIR , 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 MEDIA_URL = 'media/'
-
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = 'dashboard'
+
 LOGOUT_REDIRECT_URL = 'dashboard'
 
 LOGIN_URL = 'login'
@@ -133,3 +121,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10
 }
+
+INTERNAL_IPS = [
+    '127.0.0.1',
+]

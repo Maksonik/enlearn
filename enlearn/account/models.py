@@ -1,10 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
-
 from word.models import Word
 
 
-# Create your models here.
 class Learner(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     word = models.ForeignKey(Word, on_delete=models.CASCADE)

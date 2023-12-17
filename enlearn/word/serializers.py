@@ -27,6 +27,49 @@ class DescriptionSerializer(serializers.ModelSerializer):
         fields = ['part_of_speech', 'general_meaning', 'deep_meaning', 'translate']
 
 
+class ExampleSerializerWord(serializers.ModelSerializer):
+    class Meta:
+        model = Example
+        fields = ['example', 'translate']
+
+
+class WordSerializer(serializers.ModelSerializer):
+    descriptions = DescriptionSerializer(many=True)
+    sounds = SoundSerializer(many=True)
+    phrases = PhraseSerializer(many=True)
+    forms = FormSerializer(many=True)
+    examples = ExampleSerializerWord(many=True, read_only=True)
+
+    class Meta:
+        model = Word
+        fields = ['name', 'short_description', 'rank', 'descriptions', 'sounds', 'phrases', 'forms', 'examples']
+
+    def create(self, validated_data):
+        """
+        Создание слова через API
+        """
+        descriptions_data = validated_data.pop('descriptions', [])
+        sounds_data = validated_data.pop('sounds', [])
+        phrases_data = validated_data.pop('phrases', [])
+        forms_data = validated_data.pop('forms', [])
+
+        word = Word.objects.create(**validated_data)
+
+        for description_data in descriptions_data:
+            word.descriptions.add(Description.objects.create(word=word, **description_data))
+
+        for sound_data in sounds_data:
+            word.sounds.add(Sound.objects.create(word=word, **sound_data))
+
+        for phrase_data in phrases_data:
+            word.phrases.add(Phrase.objects.create(word=word, **phrase_data))
+
+        for form_data in forms_data:
+            word.forms.add(Form.objects.create(word=word, **form_data))
+
+        return word
+    
+    
 class WordSerializerExample(serializers.ModelSerializer):
     class Meta:
         model = Word
@@ -52,40 +95,3 @@ class ExampleSerializer(serializers.ModelSerializer):
                 continue
 
         return example
-
-
-class WordSerializer(serializers.ModelSerializer):
-    descriptions = DescriptionSerializer(many=True)
-    sounds = SoundSerializer(many=True)
-    phrases = PhraseSerializer(many=True)
-    forms = FormSerializer(many=True)
-    examples = ExampleSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = Word
-        fields = ['name', 'short_description', 'rank', 'descriptions', 'sounds', 'phrases', 'forms', 'examples']
-
-    def create(self, validated_data):
-        '''
-        Создание слова через API
-        '''
-        descriptions_data = validated_data.pop('descriptions', [])
-        sounds_data = validated_data.pop('sounds', [])
-        phrases_data = validated_data.pop('phrases', [])
-        forms_data = validated_data.pop('forms', [])
-
-        word = Word.objects.create(**validated_data)
-
-        for description_data in descriptions_data:
-            word.descriptions.add(Description.objects.create(word=word, **description_data))
-
-        for sound_data in sounds_data:
-            word.sounds.add(Sound.objects.create(word=word, **sound_data))
-
-        for phrase_data in phrases_data:
-            word.phrases.add(Phrase.objects.create(word=word, **phrase_data))
-
-        for form_data in forms_data:
-            word.forms.add(Form.objects.create(word=word, **form_data))
-
-        return word
