@@ -21,14 +21,13 @@ class FormInline(admin.TabularInline):
 class PhraseInline(admin.TabularInline):
     model = Phrase
 
-class ExamplesInline(admin.TabularInline):
-    model = Example.words.through
 
 
 @admin.register(Word)
 class WordAdmin(admin.ModelAdmin):
     list_display = ('name', 'short_description', 'rank')
-    inlines = [DescriptionInline, SoundInline, FormInline, PhraseInline, ExamplesInline]
+
+    inlines = [DescriptionInline, SoundInline, FormInline, PhraseInline]
 
 
 @admin.register(Description)
@@ -51,19 +50,9 @@ class PhraseAdmin(admin.ModelAdmin):
     pass
 
 
-class ExampleAdminForm(forms.ModelForm):
-    class Meta:
-        model = Example
-        fields = '__all__'
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # Ограничиваем выбор слов только теми, которые уже привязаны к текущему примеру
-        self.fields['words'].queryset = Word.objects.all()[:50]
-
 
 @admin.register(Example)
 class ExampleAdmin(admin.ModelAdmin):
     list_display = ('example', 'translate')
-    filter_horizontal = ('words',)
-    form = ExampleAdminForm
+    raw_id_fields = ['words']
+
