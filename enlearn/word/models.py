@@ -23,7 +23,7 @@ def sound_path(instance, filename):
 class Word(models.Model):
     name = models.CharField(max_length=255, unique=True)
     short_description = models.CharField(max_length=1000, blank=True, null=True)
-    rank = models.CharField(default='> 22000', blank=True, null=True)
+    rank = models.IntegerField(default=22000, blank=True, null=True)
 
     class Meta:
         ordering = ['name', 'rank']

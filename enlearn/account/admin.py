@@ -6,6 +6,7 @@ class StudyWordInline(admin.TabularInline):
     model = StudyWord
     extra = 1
     raw_id_fields = ('word',)
+    readonly_fields = ('created', 'updated','time_learning')
 
 
 @admin.register(Learner)

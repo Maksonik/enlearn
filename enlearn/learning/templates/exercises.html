@@ -2,6 +2,38 @@
 
 {% block title %}Упражения{% endblock %}
 
+
+
 {% block content %}
+{% block info %}
+
+{% endblock %}
+<div class='buttuns'>
+    <button type="button" class="btn btn-outline-success remember big">Вспомнить всё</button>
+    <button type="button" class="btn btn-outline-success biathlon big">Биатлон</button>
+</div>
+<div class='notes'>
+    <h2>Предложения для изучения</h2>
+    <div class='words d-flex flex-wrap min-max-w'>
+        {% for word in words %}
+        <span class="min-w-120"><a href="{% url 'words:word_detail'%}?word={{word.name}}">{{word.name}}</a></span>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
+
+{% block domready %}
+
+    let btnR = document.querySelector('button.remember')
+    btnR.addEventListener('click', (e) => {
+        window.location.href = '{% url "learning:remember_all" %}'
+    })
+
+    let btnB = document.querySelector('button.biathlon')
+    btnB.addEventListener('click', (e) => {
+        window.location.href = '{% url "learning:biathlon" %}'
+    })
+    
 
 {% endblock %}

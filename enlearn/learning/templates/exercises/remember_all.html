@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block title %}Вспомнить всё{% endblock %}
+
+
+{% block content %}
+
+<div class="main">
+    <div class="block">
+        <div class="form">
+         <div class="name">
+            <h3>Word</h3>
+            <h4>|Transcription|</h4>
+         </div>
+         <div class="hints">
+
+         </div>
+        <div class="buttuns">
+            <button type="button" class="btn btn-outline-danger btn-lg">Не помню</button>
+            <button type="button" class="btn btn-outline-warning btn-lg">Помощь</button>
+            <button type="button" class="btn btn-outline-success btn-lg remember">Помню</button>
+            <button type="button" class="btn btn-outline-info btn-lg">Прослушать</button>
+        </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block domready %}
+
+
+// Получает слова из базы
+async function getWords() {
+    const response = await fetch('{% url "learning:get_all_studywords" %}')
+    const data = await response.json()
+    return JSON.parse(data.data)
+}
+
+// Получает подробную инфу о слове
+async function getInfoWord(word) {
+    let response = await fetch(`http://127.0.0.1:8000/api/v1/words/${word.word_id}`)
+    let data = await response.json()
+    return data
+}
+
+// Устанавливает информацию на сайте
+async function setInfoWord(word) {
+    let name = document.querySelector('h3')
+    let transcription = document.querySelector('h4')
+
+    name.textContent = word.name
+    transcription.textContent = word.sounds[0].transcription
+}
+
+async function ChangeLevelWord(wordName, change) {
+    const url = '{% url "change_level_word" %}';
+    const data = {
+        level: change,
+        word: wordName
+    }
+
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type' : 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    console.log('ok')
+}
+
+async function wordWithWords() {
+    let inc = 0
+    let jsonWords = await getWords()
+    if (inc >= jsonWords.length) {
+        // редирект если слов больше нет
+        console.log('срабатывает')
+        window.location.href = '{% url "learning:finished" %}'
+    }
+    let info = await getInfoWord(jsonWords[inc])
+    await setInfoWord(info)
+
+    async function nextWord() {
+        inc += 1
+        console.log(inc, jsonWords.length)
+        if (inc >= jsonWords.length) {
+            // редирект если слов больше нет
+            console.log('срабатывает')
+            window.location.href = '{% url "learning:finished" %}'
+        }
+        info = await getInfoWord(jsonWords[inc])
+        return info
+    }
+
+    let btnLesson = document.querySelector('.btn-outline-info')
+    btnLesson.addEventListener('click', (e) => {
+        let audio = new Audio(`${info.sounds[0].sound}`)
+        audio.play()
+    })
+
+    let bthSuccess = document.querySelector('.remember')
+    bthSuccess.addEventListener('click', async (e) => {
+        await ChangeLevelWord(info.name, 'up')
+        info = await nextWord()
+        await setInfoWord(info)
+    })
+
+    let bthFail = document.querySelector('.btn-outline-danger')
+    bthFail.addEventListener('click', async (e) => {
+        await ChangeLevelWord(info.name, 'down')
+        info = await nextWord()
+        await setInfoWord(info)
+    })
+
+    let btnHelp = document.querySelector('.btn-outline-warning')
+    btnHelp.addEventListener('click', (e) => {
+        if (!(document.querySelector('.eng'))){
+            elementP = document.createElement('p')
+            elementP.classList.add('eng')
+            hints = document.querySelector('.hints')
+            hints.appendChild(elementP)
+            for (let example of info.examples.slice(0,2)) {
+                elementP.textContent = example.example
+
+                if (document.querySelector('.translate')){
+                    document.querySelector('.translate').remove()
+                }
+            
+                hints.appendChild(elementP)
+            }
+        } else if (!(document.querySelector('.ru'))) {
+            elementP = document.createElement('p')
+            elementP.classList.add('ru')
+            hints = document.querySelector('.hints')
+            hints.appendChild(elementP)
+            for (let example of info.examples.slice(0,2)) {
+                
+                elementP.textContent = example.translate
+
+                hints = document.querySelector('.hints')
+                hints.appendChild(elementP)
+        }} else if (!(document.querySelector('.translate'))) {
+            elementP = document.createElement('p')
+            elementP.classList.add('translate')
+            elementP.textContent = info.short_description
+
+            document.querySelectorAll('.eng').forEach(e => e.remove())
+            document.querySelectorAll('.ru').forEach(e => e.remove())
+
+
+            hints = document.querySelector('.hints')
+            hints.appendChild(elementP)
+        }
+    })
+}
+
+wordWithWords()
+
+
+{% endblock %}

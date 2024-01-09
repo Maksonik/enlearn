@@ -20,6 +20,7 @@ def word_detail(request):
         return render(request, 'detail.html',
                       {'word': word,
                        'descriptions': descriptions})
+        
 
 def _get_description(word):
     """Собрать descriptions для облегченной работы в htnl"""
@@ -64,7 +65,7 @@ class WordViewSet(viewsets.ModelViewSet):
     queryset = Word.objects.all()
     serializer_class = WordSerializer
     permission_classes = [IsAdminUser]
-    lookup_field = 'name'
+
 
 
 class ExampleViewSet(viewsets.ModelViewSet):

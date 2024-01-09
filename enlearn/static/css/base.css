@@ -126,3 +126,68 @@ sub {
 .hidden {
     display: none;
 }
+
+.form {
+    display: flex;
+    justify-content:space-between;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid;
+    border-radius: 25px;
+    height: 525px;
+    padding: 25px;
+}
+
+.name {
+    display: flex;
+    justify-content:space-between;
+    flex-direction: column;
+    align-items: center;
+}
+
+h3 {
+    margin-top: 35px;
+    font-size: 50px;
+    font-weight: 400;
+}
+
+.buttuns {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content:space-evenly;
+    align-items: center;
+}
+
+.buttuns > button {
+    margin-bottom: 10px;
+    min-width: 170px;
+    
+}
+
+.big {
+    font-size: 50px;
+    margin: 25px;
+    margin-top: 50px;
+    padding: 25px;
+    width: auto;
+}
+
+.words {
+    flex-direction: column;
+    max-height: 250px;
+}
+
+.min-w-120 {
+    min-width: 75px;
+}
+
+.min-max-w {
+    min-width: 600px;
+    max-width: 1200px;
+}
+
+.disable {
+    pointer-events: none;
+    color: red;
+}

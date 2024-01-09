@@ -8,7 +8,7 @@
         <div class="word">
             <span class="name">{{ word.name|title }} <sub>{{ word.rank }}</sub></span>
             <div class="learning">
-                Изучать
+                <a class="create-study-word">Изучать</a>
             </div>
         </div>
         <div>
@@ -156,5 +156,51 @@
         })
     }
 
+    async function CreateStudyWord(wordName) {
+        const url = '{% url "create_study_word" %}';
+        const data = {
+            word: wordName
+        }
+    
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type' : 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        console.log('ok')
+    }
+
+    async function checkWord(word) {
+        const url = '{% url "check_study_word" %}';
+        const data = {
+            word: word
+        }
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type' : 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+
+        let message = await response.json()
+        if (message.message === 'yes' ) {
+            let btn = document.querySelector('.create-study-word')
+            console.log('yes')
+            btn.classList.add('disable')
+            btn.textContent = 'Изучается'
+        }
+        
+    }
+
+    const buttonStudy = document.querySelector('.create-study-word')
+    buttonStudy.addEventListener('click', async () => {
+        await CreateStudyWord('{{word.name}}')
+        await checkWord('{{word.name}}')
+    })
+
+    checkWord('{{word.name}}')
 
 {% endblock %}
