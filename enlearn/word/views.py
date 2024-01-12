@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
+from django.http import Http404
 import json
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser
@@ -11,15 +12,20 @@ from .serializers import WordSerializer, ExampleSerializer
 def word_detail(request):
     """Сайт для детального обзора страницы"""
     word_name = request.GET.get('word')
-    word = get_object_or_404(Word, name=word_name.lower())
-
-    if request.method == 'GET':
-        serializer = WordSerializer(word)
-        word = serializer.data
-        descriptions = _get_description(word)
-        return render(request, 'detail.html',
-                      {'word': word,
-                       'descriptions': descriptions})
+    try:
+        word = get_object_or_404(Word, name=word_name.lower().strip())
+        if request.method == 'GET':
+            serializer = WordSerializer(word)
+            word = serializer.data
+            descriptions = _get_description(word)
+            forms = _get_form(word)
+            return render(request, 'detail.html',
+                        {'word': word,
+                        'descriptions': descriptions,
+                        'forms' : forms})
+    except Http404:
+        return render(request,
+                      'mistake.html')
         
 
 def _get_description(word):
@@ -33,6 +39,13 @@ def _get_description(word):
             (desc['deep_meaning'], desc['translate']))
     return descriptions
 
+def _get_form(word):
+    """Собрать forms для облегченной работы в htnl"""
+    forms = {}
+    for form in word['forms']:
+         forms.setdefault(form['part_of_speech'], [])
+         forms[form['part_of_speech']].append([form['condition'],form['value']])
+    return forms
 
 
 def word_list(request):

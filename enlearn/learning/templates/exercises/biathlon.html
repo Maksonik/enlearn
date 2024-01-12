@@ -8,18 +8,22 @@
 <div class="main">
     <div class="block">
         <div class="form">
-         <div class="name">
-            <h3>Word</h3>
-            <h4>|Transcription|</h4>
-         </div>
-         <div class="hints">
-
-         </div>
-        <div class="buttuns">
-            <button type="button" class="btn btn-outline-warning btn-lg">Помощь</button>
-            <button type="button" class="btn btn-outline-info btn-lg">Прослушать</button>
-            <button type="button" class="btn btn-outline-success btn-lg remember">Дальше</button>
-        </div>
+            <div>
+                <h4 class="word">???</h4>
+                <h4 class="transcription"></h4>
+            </div>
+            <input type="text" class="form-control w-100 biathlon">
+            <div class="name-b">
+                <h4 class="short-description">Short description</h3>
+                <h4 class="sentense">translate</h4>
+                <h4 class="translate">translate</h4>
+            </div>
+            <div class="hints"></div>
+            <div class="buttuns">
+                <button type="button" class="btn btn-outline-warning btn-lg help">Помощь</button>
+                <button type="button" class="btn btn-outline-info btn-lg">Прослушать</button>
+                <button type="button" class="btn btn-outline-success btn-lg remember">Дальше</button>
+            </div>
         </div>
     </div>
 </div>
@@ -28,5 +32,130 @@
 
 {% block domready %}
 
+// Получает слова из базы
+async function getWords() {
+    const response = await fetch('{% url "learning:get_all_studywords" %}')
+    const data = await response.json()
+    return JSON.parse(data.data)
+}
 
+// Получает подробную инфу о слове
+async function getInfoWord(word) {
+    let response = await fetch(`http://127.0.0.1:8000/api/v1/words/${word.word_id}`)
+    let data = await response.json()
+    return data
+}
+
+// Устанавливает информацию на сайте
+async function setInfoWord(word) {
+    let short_description = document.querySelector('h4.short-description')
+    let sentense = document.querySelector('h4.sentense')
+    let translate = document.querySelector('h4.translate')
+    console.log(word.name)
+
+    short_description.textContent = word.short_description
+
+    textSentense = word.examples[1].example.replace(word.name, ' .... ')
+
+    sentense.textContent = textSentense
+    translate.textContent = word.examples[1].translate
+}
+
+async function help(word) {
+    let transcription = document.querySelector('h4.transcription')
+    let sentense = document.querySelector('h4.sentense')
+
+    sentense.textContent = word.examples[0].example
+    transcription.textContent = word.sounds[0].transcription
+}
+
+
+
+async function wordWithWords() {
+    let inc = 0
+    let jsonWords = await getWords()
+    if (inc >= jsonWords.length) {
+        // редирект если слов больше нет
+        console.log('срабатывает')
+        window.location.href = '{% url "learning:finished" %}'
+    }
+    let info = await getInfoWord(jsonWords[inc])
+    await setInfoWord(info)
+
+    async function nextWord() {
+        inc += 1
+        console.log(inc, jsonWords.length)
+        if (inc >= jsonWords.length) {
+            // редирект если слов больше нет
+            console.log('срабатывает')
+            window.location.href = '{% url "learning:finished" %}'
+        }
+        info = await getInfoWord(jsonWords[inc])
+        return info
+    }
+
+
+    let btnLesson = document.querySelector('.btn-outline-info')
+    btnLesson.addEventListener('click', (e) => {
+        let audio = new Audio(`${info.sounds[0].sound}`)
+        audio.play()
+    })
+
+    let bthSuccess = document.querySelector('.remember')
+    bthSuccess.addEventListener('click', async (e) => {
+        info = await nextWord()
+        await setInfoWord(info)
+    })
+
+    let btnHelp = document.querySelector('.help') 
+    btnHelp.addEventListener('click', async (e) => {
+        await help(info)
+    })
+
+    document.addEventListener('keydown', async (e) => {
+        if (e.key === 'Enter') {
+            let input = document.querySelector('input.biathlon')
+            if (input.classList.contains('success')) {
+                input.classList.remove('success')
+                input.classList.remove('wrong')
+
+                let transcription = document.querySelector('h4.transcription')
+                let word = document.querySelector('h4.word')
+
+                word.textContent = '???'
+                transcription.textContent = ''
+
+                info = await nextWord()
+                await setInfoWord(info)
+
+                input.value = ''
+                return;
+            }
+
+            input.classList.remove('success')
+            input.classList.remove('wrong')
+            let value = input.value
+
+            if (value == info.name) {
+                let word = document.querySelector('h4.word')
+                word.textContent = info.name
+                await help(info)
+                input.classList.add('success')
+            } else {
+                input.classList.add('wrong')
+                pathValue = ''
+
+                for (let i=0; i < info.name.length-1; i++) {
+                    if (value[i] == info.name[i]) {
+                        pathValue += value[i]
+                    }
+                } 
+                input.value = pathValue
+            }
+        }
+    })
+}
+
+
+wordWithWords()
 {% endblock %}

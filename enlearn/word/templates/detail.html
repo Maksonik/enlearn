@@ -6,73 +6,47 @@
 <div class="main">
     <div class="block">
         <div class="word">
-            <span class="name">{{ word.name|title }} <sub>{{ word.rank }}</sub></span>
+            <span class="name">{{ word.name|title }} <sub>{%if word.rank|add:"0" >= 22000 %}> {%endif%}{{ word.rank }}</sub></span>
             <div class="learning">
                 <a class="create-study-word">Изучать</a>
             </div>
         </div>
-        <div>
-            <span class="short-description">{{ word.short_description }}</span>
+        {% if not word.short_description == None %}
+        <div class="phrase">
+            <span class="short-description ">{{ word.short_description }}</span>
         </div>
         <hr>
+        {% endif %}
+        {% if word.sounds.0.sound is not None and  word.sounds.1.sound is not None %}
         <div class="d-flex flex-row">
             {% for sound in word.sounds %}
-            <div class="sound flex-grow-1">
-                <p class="transcription">{{sound.transcription}}</p>
-                <audio src="{{sound.sound}}" controls="controls">Слушать</audio>
+            <div class="sound flex-grow-1 d-flex flex-col" >
+                <span class="transcription phrase">{{sound.transcription}}</span>
+                <audio  controls="controls" preload="auto" hidden>
+                    <source src="{{sound.sound}}" type="audio/mpeg">
+                </audio>
+                <span class="audio" onclick="this.previousElementSibling.load();this.previousElementSibling.play()">
+                    <img src="/media/images/play.jpg" width="25px">
+                </span>
             </div>
             {% endfor %}
         </div>
         <hr>
+        {% endif %}
+        {% if forms %}
         <p>Формы слова:</p>
-        <div class="d-flex flex-row m-3 ">
-            {% with verb_forms=word.forms %}
-            {% if verb_forms|length > 0 %}
-            <div class="verb-block flex-grow-1 ">
-                <p>verb</p>
-                {% for form in verb_forms %}
-                {% if form.part_of_speech == 'verb' %}
-                <div>
-                    <span class="grey">{{ form.condition }}</span>
-                    <span>{{ form.value }}</span>
-                </div>
-                {% endif %}
-                {% endfor %}
-            </div>
-            {% endif %}
-            {% endwith %}
-            {% with noun_forms=word.forms %}
-            {% if noun_forms|length > 0 %}
-            <div class="noun-block flex-grow-1">
-                <p>noun</p>
-                {% for form in noun_forms %}
-                {% if form.part_of_speech == 'noun' %}
-                <div>
-                    <span class="grey">{{ form.condition }}</span>
-                    <span>{{ form.value }}</span>
-                </div>
-                {% endif %}
-                {% endfor %}
-            </div>
-            {% endif %}
-            {% endwith %}
-            {% with adjectival_forms=word.forms %}
-            {% if adjectival_forms|length > 0 %}
-            <div class="adjectival-block flex-grow-1">
-                <p>adjectival</p>
-                {% for form in adjectival_forms %}
-                {% if form.part_of_speech == 'adjectival' %}
-                <div>
-                    <span class="grey">{{ form.condition }}</span>
-                    <span>{{ form.value }}</span>
-                </div>
-                {% endif %}
-                {% endfor %}
-            </div>
-            {% endif %}
-            {% endwith %}
+        <div class="d-flex forms-word phrase">
+        {% for part_of_speech, forms in forms.items %}
+        <div class="d-flex form-word">
+            <span class="part-of-speech">{{part_of_speech}}:</span>
+            {% for form in forms %}
+                <span><i class="grey">{{form.0}}</i> {{form.1}}</span>
+            {% endfor %}
+        </div>
+        {% endfor %}
         </div>
         <hr>
+        {% endif %}
         {% for part_of_speech, description in descriptions.items%}
         <div class="meaning">
             <p class="m-2 part-of-speech">{{ part_of_speech }}</p>
@@ -101,13 +75,16 @@
         </div>
         {% endfor %}
         <hr>
+        {% if word.phrases %}
         <p>Словосочетания:</p>
         {% for phrase in word.phrases%}
-        <div>
-            <span class="phrase">{{phrase.phrase}}</span> - <span class="grey">{{phrase.translate}}</span>
+        <div class="phrase">
+            <span >{{phrase.phrase}}</span> - <span class="grey">{{phrase.translate}}</span>
         </div>
         {% endfor %}
         <hr>
+        {% endif %}
+        {% if word.examples %}
         <p>Примеры с переводом:</p>
         {% for example in word.examples|slice:":15"%}
         <div>
@@ -117,9 +94,11 @@
             </p>
         </div>
         {% endfor %}
+        {% endif %}
     </div>
 </div>
 {% endblock %}
+
 
 {% block domready %}
     const generalMeanings = document.querySelectorAll('div.general-meaning')
@@ -136,8 +115,6 @@
             })
     }
 }
-
-
     const buttonsMore = document.querySelectorAll('span.more')
     for (let button of buttonsMore) {
         button.style.cursor = 'pointer'
@@ -188,7 +165,6 @@
         let message = await response.json()
         if (message.message === 'yes' ) {
             let btn = document.querySelector('.create-study-word')
-            console.log('yes')
             btn.classList.add('disable')
             btn.textContent = 'Изучается'
         }
@@ -202,5 +178,4 @@
     })
 
     checkWord('{{word.name}}')
-
 {% endblock %}

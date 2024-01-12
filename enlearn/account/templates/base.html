@@ -1,64 +1,121 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>{% block title %}{% endblock %}</title>
+  <head>
+    <title>{% block title %}Главная страница{% endblock %}</title>
     {% load bootstrap5 %}
-    {% bootstrap_css %}
+    {% bootstrap_css %} 
     {% bootstrap_javascript %}
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+    <link rel="icon" href="/media/images/logo.png" type="image/x-icon" />
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-        href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-        rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
-</head>
-
-<body>
+      href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
     <ul class="nav bg-dark p-2 flex-nowrap">
-        <li class="nav-item flex-grow-1">
-            <a class="nav-link link-light text-center" href="/">Главная</a>
-        </li>
-        <li class="nav-item w-50 flex-grow-1">
-            <div class="search_box">
-                <form id="searchForm" method="get" action="{% url 'words:word_detail' %}">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Поиск" name="word" id="word">
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-success btn-outline-secondary" type="submit">Искать</button>
-                        </div>
-                    </div>
-                </form>
-                <div class="word_tips"></div>
+      <li class="nav-item flex-grow-1">
+        <a class="nav-link link-light text-center" href="/">Главная</a>
+      </li>
+      <li class="nav-item w-50 flex-grow-1">
+        <div class="search_box">
+          <form id="searchForm" method="get" action="{% url 'words:word_detail' %}">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Поиск" name="word" id="word"/>
+              <div class="input-group-append">
+                <button class="btn btn-outline-success btn-outline-secondary" type="submit">
+                  Искать
+                </button>
+              </div>
             </div>
-        </li>
-        {% if not request.user.is_authenticated %}
-        <li class="nav-item flex-grow-1 text-center">
-            <a class="nav-link link-light" href="{% url 'login' %}">Войти</a>
-        </li>
-        {% else %}
-        <li class="nav-item flex-grow-1 text-center">
-            <a class="nav-link link-light" href="{% url 'learning:profile' %}">Профиль</a>
-        </li>
-        <li class="nav-item flex-grow-1 text-center">
-            <a class="nav-link link-light" href="{% url 'learning:exercises' %}">Упражения</a>
-        </li>
-        <li class="nav-item flex-grow-1 text-center">
-            <a class="nav-link link-light" href="{% url 'logout' %}">Выйти</a>
-        </li>
-        {% endif %}
+          </form>
+          <div class="word_tips"></div>
+        </div>
+      </li>
+      {% if not request.user.is_authenticated %}
+      <li class="nav-item flex-grow-1 text-center">
+        <a class="nav-link link-light" href="{% url 'login' %}">Войти</a>
+      </li>
+      {% else %}
+      <li class="nav-item flex-grow-1 text-center">
+        <a class="nav-link link-light" href="{% url 'learning:profile' %}"
+          >Профиль</a
+        >
+      </li>
+      <li class="nav-item flex-grow-1 text-center">
+        <a class="nav-link link-light" href="{% url 'learning:exercises' %}"
+          >Упражения</a
+        >
+      </li>
+      <li class="nav-item flex-grow-1 text-center">
+        <a class="nav-link link-light" href="{% url 'logout' %}">Выйти</a>
+      </li>
+      {% endif %}
     </ul>
     {% block content %}
-    {% endblock %}
 
-</body>
-<script>
+    <div class="main">
+      <div class="block">
+        <div class="center-text">
+          <h3 class="big-text">Welcome to enlearn</h3>
+          <p class="left-text indent">
+            Хелоу май френд, зис сайт хелп ту ю... Короче, братишка или
+            сетричка! Добро пожаловать на сайт, который поможет вам изучать
+            английские слова! Здесь, есть все словечки, которые помогут тебе
+            охмурить любого англоговорящего человека, также собранны упражения,
+            которые облегчают и структурируют процесс обучения, чтобы не забыть
+            их в споре, а то будете бесконечно прокручивать в голове, как бы
+            сказали, если помнили нужные слова. Зуб даю поможет.
+          </p>
+          <h2 class="left-text">Ультра упражения</h2>
+          <p class="left-text indent">
+            Безумно мощные! Невероятно прогрессивные! Иии... да, самые простые.
+            Зато рабочие! Дам вам секрет, только никому! Не усложняйте свою
+            жизнь!
+          </p>
+          <h2 class="left-text">Потерясающий профиль</h2>
+          <p class="left-text indent">
+            Обожаете цифры? Любите следить за процессом? Хотите контролировать и
+            домировать? То лучше, сначала обратиться к психологу, мало ли что...
+            Если всё хорошо с вами, то в профиле можно следить за всем
+            прогрессом обучения!
+          </p>
+          <h2 class="left-text">База слов</h2>
+          <p class="left-text indent">
+            Это база! Сам лично путешествовал по миру, собирал крупинки смыслов
+            каждого слова. Был на грани жизни и смерти, сражался с соблезубым
+            тигром, чтобы мудрый индус, рассказал секреты их акцента. Разбирался
+            в сокращениях автралийцев. И черт возьми меня побрал, общался с
+            инстинными англичанами! Упаси господь меня повторить это... И теперь
+            предлагаю это совершенно бесплатно без смс и регистрации!
+          </p>
+          <h2 class="left-text">Есть вопросики?</h2>
+          <p class="left-text indent">
+            Если есть удивительные идеи, как улучшить сайт. Безумная ярость
+            из-за ошибок на сайте. Безграчная благодарность и вы незнаете, кому
+            это высказать. То ваш покорный слуга находится тут:
+            <a href="https://vk.com/maksonik6" target="_blank"><img src="/media/images/logoVK.png" width="30px"/></a>
+            <a href="https://www.youtube.com/@the_forever_student" target="_blank"><img src="/media/images/logoYouTube.png" width="30px"/></a>
+            <a href="https://t.me/Maksonik6" target="_blank"><img src="/media/images/logoTelegram.png" width="30px"/></a>
+          </p>
+        </div>
+      </div>
+    </div>
+    {% endblock %}
+  </body>
+  <script>
     document.addEventListener('DOMContentLoaded', (event) => {
         let wordListUrl = "{% url 'words:word_list' %}";
         let search = document.querySelector('.form-control')
@@ -102,5 +159,5 @@
         {% block domready %}
         {% endblock %}
     })
-</script>
+  </script>
 </html>

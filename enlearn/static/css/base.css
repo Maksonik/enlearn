@@ -35,8 +35,8 @@ body {
 }
 
 .block {
-    padding: 90px;
-    padding-top: 150px;
+    padding: 50px;
+    padding-top: 50px;
     width: 1000px;
     background-color: white;
 }
@@ -77,12 +77,29 @@ sub {
 }
 
 .sound {
-    margin-top: 10px;
+    align-items: center;
+}
+
+.audio {
+    margin-left: 20px;
 }
 
 .transcription {
     font-family: 'transcription';
-    font-size: 19px;
+    font-size: 20px;
+}
+
+.forms-word {
+    flex-direction: row;
+}
+
+.form-word {
+    flex-direction: column;
+    flex: 1;
+}
+
+.nowrap {
+    flex-wrap: nowrap;
 }
 
 .part-of-speech {
@@ -138,17 +155,20 @@ sub {
     padding: 25px;
 }
 
-.name {
+.name-b {
     display: flex;
     justify-content:space-between;
     flex-direction: column;
     align-items: center;
 }
 
-h3 {
-    margin-top: 35px;
+.big-text {
     font-size: 50px;
     font-weight: 400;
+}
+
+.margin-top-30 {
+    margin-top: 50px;
 }
 
 .buttuns {
@@ -187,7 +207,53 @@ h3 {
     max-width: 1200px;
 }
 
-.disable {
+.create-study-word {
+    text-decoration: none;
+    font-weight:900;
+    color:#21b300
+}
+.create-study-word:hover {
+    text-decoration: none;
+    color:#1d9902
+}
+
+.create-study-word.disable {
     pointer-events: none;
-    color: red;
+    color: #d10202
+}
+
+.form-bi {
+    flex-shrink: 2;
+}
+
+.short-description-b {
+    font-weight: 12px;
+    font-size: 12px;
+}
+
+.success:focus {
+    border-color: green;
+    box-shadow: 0 0 0 0.25rem lightgreen
+}
+
+.wrong:focus {
+    border-color: red;
+    box-shadow: 0 0 0 0.25rem lightcoral
+}
+
+.center-text {
+    text-align: center;
+}
+
+.center-text li {
+    margin: 20px; 
+    text-align: left;
+  }
+
+.left-text {
+    text-align: left;
+}
+
+.indent {
+    text-indent: 1em;
 }
