@@ -1,39 +1,66 @@
 {% extends "base.html" %}
-
-{% block title %}Упражения{% endblock %}
-
-
-
-{% block content %}
-{% block info %}
-
-{% endblock %}
-<div class='buttuns'>
-    <button type="button" class="btn btn-outline-success remember big">Вспомнить всё</button>
-    <button type="button" class="btn btn-outline-success biathlon big">Биатлон</button>
-</div>
-<div class='notes'>
-    <h2>Предложения для изучения</h2>
-    <div class='words d-flex flex-wrap min-max-w'>
-        {% for word in words %}
-        <span class="min-w-120"><a href="{% url 'words:word_detail'%}?word={{word.name}}">{{word.name}}</a></span>
-        {% endfor %}
+ {% block title %}Упражения{% endblock %} 
+ {% block content %} {% block info %} {% endblock %}
+<div class="main">
+  <div class="block">
+    <div class="buttuns">
+      <button type="button" class="btn btn-outline-success biathlon big">
+        Биатлон
+      </button>
+      <button type="button" class="btn btn-outline-success remember big">
+        Вспомнить всё
+      </button>
     </div>
+    <h2 class="left-text">Справка</h2>
+    <p class="left-text indent">
+        Короче, Пользователь, я тебе дал упражнения и в благородство играть не буду: 
+        выучишь для меня пару слов – и мы в расчете. 
+        Заодно посмотрим, как быстро у тебя башка после лени прояснится. 
+        А по поводу обучения постараюсь помочь. 
+        Хрен его знает, на кой ляд тебе этот английский сдался, но я в чужие дела не лезу, хочешь выучить, значит есть за что…
+    <p class="left-text indent">
+        Слушай, перед тем, как влезть в эти упражнения, неплохо бы тебе хорошенько подготовиться. 
+        Так вот, собери сюда те слова, что хочешь вбить в голову.
+        Можешь заглянуть в <strong>"Предложения&nbsp;для&nbsp;изучения"</strong>, там всякие новые слова, которые тебе еще не встречались. 
+        Потом возьми <strong>"Биатлон"</strong>, натренируй свой мозг, и когда будешь чувствовать себя готовым, 
+        дай волю <strong>"Вспомнить всё"</strong>, чтобы перевести слова на следующий уровень или понизить, если чего-то не въехал.
+    </p>
+    <p class="left-text indent">
+        И помни, эти слова, что начал учить, нужно вспоминать не раз в году. 
+        Ты их повторяй через день, потом через 3 дня, через 7, через полмесяца и наконец через месяц. 
+        Только после такого подхода я пойму, что ты действительно запомнил это слово. 
+        Заходи потом в свой профиль, там будешь видеть подробную информацию о том, что и как выучил.
+    </p>
+    <p class="left-text" style="font-weight: 700;">
+        Ну, а теперь парочка советов, чтобы ты лучше запоминал:
+    </p>
+    <p class="left-text indent">
+        <ul>
+            <li>Веди тетрадку. Записывай туда новые слова, транскрипцию, да примеры. Каждый день пересматривай, чтоб не забывать. Это как сбор на вылазку, знаешь?</li>
+            <li>Привыкай к транскрипции. Иначе потом будешь стоять, как идиот, не понимая, что тебе говорят.</li>
+            <li>Проговаривай вслух. Так, чтоб и другие вон за стеной услышали. Тут без вредности делай.</li>
+            <li>Каждый день заходи сюда, выполняй упражнения. Иначе забудешь, как в рюкзаке сигареты.</li>
+            <li>Удачи, Пользователь!</li>
+        </ul>
+    </p>
+    </p>
+    <div class="notes">
+      <h2>Предложения для изучения:</h2>
+      <div class="words d-flex flex-wrap min-max-w">
+        {% for word in words %}
+        <span class="min-w-120"><a href="{% url 'words:word_detail'%}?word={{word.name}}" class="word-click" target="_blank">{{word.name}}</a>
+        </span>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
 </div>
-
-{% endblock %}
-
-{% block domready %}
-
-    let btnR = document.querySelector('button.remember')
-    btnR.addEventListener('click', (e) => {
-        window.location.href = '{% url "learning:remember_all" %}'
-    })
-
-    let btnB = document.querySelector('button.biathlon')
-    btnB.addEventListener('click', (e) => {
-        window.location.href = '{% url "learning:biathlon" %}'
-    })
-    
-
-{% endblock %}
+{% endblock %} 
+{% block domready %} 
+let btnR = document.querySelector('button.remember') 
+btnR.addEventListener('click', (e) =>{
+     window.location.href = '{% url "learning:remember_all" %}' }) 
+let btnB = document.querySelector('button.biathlon') 
+btnB.addEventListener('click', (e) =>{
+     window.location.href = '{% url "learning:biathlon" %}' }) 
+     {% endblock %}

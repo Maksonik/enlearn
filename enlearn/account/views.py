@@ -41,10 +41,16 @@ def check_study_word(request):
         data = json.loads(request.body.decode('utf-8'))
         word = data['word']
     try:
+        message = {'message': 'yes'}
         obj = StudyWord.objects.get(learner=Learner.objects.get(user=user), word=Word.objects.get(name=word))
-        return JsonResponse({'message': 'yes'})
+        if obj.stage_learning_word == 'Learned':
+            message['learning'] = 'yes'
+        else:
+            message['learning'] = 'no'
+        print(message)
+        return JsonResponse(message)
     except StudyWord.DoesNotExist:
-        return JsonResponse({'message': 'no'})
+        return JsonResponse(message)
 
 
 @csrf_exempt

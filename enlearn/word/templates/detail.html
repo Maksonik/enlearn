@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}{{word.title}}{% endblock %}
+{% block title %}{{word.name}}{% endblock %}
 
 {% block content %}
 <div class="main">
@@ -163,7 +163,12 @@
         })
 
         let message = await response.json()
-        if (message.message === 'yes' ) {
+        if (message.message === 'yes' && message.learning === 'yes') {
+            let btn = document.querySelector('.create-study-word')
+            btn.classList.remove('disable')
+            btn.classList.add('learned')
+            btn.textContent = 'Изучено'
+        }  else if (message.message === 'yes') {
             let btn = document.querySelector('.create-study-word')
             btn.classList.add('disable')
             btn.textContent = 'Изучается'

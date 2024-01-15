@@ -173,22 +173,21 @@ sub {
 
 .buttuns {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     width: 100%;
     justify-content:space-evenly;
     align-items: center;
+    flex-direction: row;
 }
 
 .buttuns > button {
-    margin-bottom: 10px;
-    min-width: 170px;
+    min-width: 300px;
     
 }
 
 .big {
-    font-size: 50px;
+    font-size: 30px;
     margin: 25px;
-    margin-top: 50px;
     padding: 25px;
     width: auto;
 }
@@ -196,15 +195,31 @@ sub {
 .words {
     flex-direction: column;
     max-height: 250px;
+    border: black solid 2px;
+    margin: 20px;
+    padding: 10px;
+    min-height: 270px;
 }
 
 .min-w-120 {
-    min-width: 75px;
+    min-width: 40px;
+
 }
 
 .min-max-w {
-    min-width: 600px;
+    min-width: 640px;
     max-width: 1200px;
+}
+
+.word-click {
+    color: black;
+    text-decoration: none;
+    padding: 10px;
+
+}
+
+.word-click:hover {
+    color: lightgray;
 }
 
 .create-study-word {
@@ -221,6 +236,12 @@ sub {
     pointer-events: none;
     color: #d10202
 }
+
+.create-study-word.learned {
+    pointer-events: none;
+    color: black
+} 
+
 
 .form-bi {
     flex-shrink: 2;
@@ -255,5 +276,5 @@ sub {
 }
 
 .indent {
-    text-indent: 1em;
+    text-indent: 20px;
 }
