@@ -19,6 +19,9 @@ DAYS = {
 class Learner(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return str(self.user)
+
 
 class StudyWord(models.Model):
     word = models.ForeignKey(Word, related_name='learning_word',on_delete=models.CASCADE)

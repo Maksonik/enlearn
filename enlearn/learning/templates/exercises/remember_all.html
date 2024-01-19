@@ -8,16 +8,15 @@
 <div class="main">
     <div class="block">
         <div class="form">
-         <div class="name-b">
+         <div class="name-r">
             <h3 class="margin-top-30 big-text">Word</h3>
             <h4>|Transcription|</h4>
          </div>
          <div class="hints">
-
          </div>
         <div class="buttuns">
-            <button type="button" class="btn btn-outline-danger btn-lg">Не помню</button>
             <button type="button" class="btn btn-outline-warning btn-lg">Помощь</button>
+            <button type="button" class="btn btn-outline-danger btn-lg">Не помню</button>
             <button type="button" class="btn btn-outline-success btn-lg remember">Помню</button>
             <button type="button" class="btn btn-outline-info btn-lg">Прослушать</button>
         </div>
@@ -48,9 +47,44 @@ async function getInfoWord(word) {
 async function setInfoWord(word) {
     let name = document.querySelector('h3')
     let transcription = document.querySelector('h4')
+    let hints = document.querySelector('.hints')
+
+    while (hints.firstChild) {
+        hints.removeChild(hints.firstChild);
+    }
 
     name.textContent = word.name
     transcription.textContent = word.sounds[0].transcription
+}
+
+async function getExample(word) {
+    let example
+    try {
+        example = word.examples[0].example
+    } catch {
+        try {
+            example = word.phrases[0].phrase
+        } catch {
+            example = 'Нету предложения'
+        }
+    }
+    console.log(example)
+    return example
+}
+
+async function getTranslate(word) {
+    let translate
+    try {
+        translate = word.examples[0].translate
+    } catch {
+        try {
+            translate = word.phrases[0].translate
+        } catch {
+            translate = 'Нету перевода'
+        }
+    }
+    
+    return translate
 }
 
 async function ChangeLevelWord(wordName, change) {
@@ -67,7 +101,6 @@ async function ChangeLevelWord(wordName, change) {
         },
         body: JSON.stringify(data)
     })
-    console.log('ok')
 }
 
 async function wordWithWords() {
@@ -75,7 +108,6 @@ async function wordWithWords() {
     let jsonWords = await getWords()
     if (inc >= jsonWords.length) {
         // редирект если слов больше нет
-        console.log('срабатывает')
         window.location.href = '{% url "learning:finished" %}'
     }
     let info = await getInfoWord(jsonWords[inc])
@@ -86,7 +118,6 @@ async function wordWithWords() {
         console.log(inc, jsonWords.length)
         if (inc >= jsonWords.length) {
             // редирект если слов больше нет
-            console.log('срабатывает')
             window.location.href = '{% url "learning:finished" %}'
         }
         info = await getInfoWord(jsonWords[inc])
@@ -101,53 +132,56 @@ async function wordWithWords() {
 
     let bthSuccess = document.querySelector('.remember')
     bthSuccess.addEventListener('click', async (e) => {
+        bthSuccess.disabled = true;
         await ChangeLevelWord(info.name, 'up')
         info = await nextWord()
         await setInfoWord(info)
+        bthSuccess.disabled = false;
     })
 
     let bthFail = document.querySelector('.btn-outline-danger')
     bthFail.addEventListener('click', async (e) => {
+        bthFail.disabled = true;
         await ChangeLevelWord(info.name, 'down')
         info = await nextWord()
         await setInfoWord(info)
+        bthFail.disabled = false;
     })
 
     let btnHelp = document.querySelector('.btn-outline-warning')
-    btnHelp.addEventListener('click', (e) => {
+    btnHelp.addEventListener('click', async (e) => {
         if (!(document.querySelector('.eng'))){
             elementP = document.createElement('p')
             elementP.classList.add('eng')
             hints = document.querySelector('.hints')
             hints.appendChild(elementP)
-            for (let example of info.examples.slice(0,2)) {
-                elementP.textContent = example.example
-
-                if (document.querySelector('.translate')){
-                    document.querySelector('.translate').remove()
-                }
             
-                hints.appendChild(elementP)
+            let text = await getExample(info)
+            elementP.textContent = text
+
+            if (document.querySelector('.translate')){
+                document.querySelector('.translate').remove()
             }
+        
+            hints.appendChild(elementP)
+            
         } else if (!(document.querySelector('.ru'))) {
             elementP = document.createElement('p')
             elementP.classList.add('ru')
             hints = document.querySelector('.hints')
             hints.appendChild(elementP)
-            for (let example of info.examples.slice(0,2)) {
-                
-                elementP.textContent = example.translate
+            let text = await getTranslate(info)
+            elementP.textContent = text
 
-                hints = document.querySelector('.hints')
-                hints.appendChild(elementP)
-        }} else if (!(document.querySelector('.translate'))) {
+            hints = document.querySelector('.hints')
+            hints.appendChild(elementP)
+        } else if (!(document.querySelector('.translate'))) {
             elementP = document.createElement('p')
             elementP.classList.add('translate')
             elementP.textContent = info.short_description
 
             document.querySelectorAll('.eng').forEach(e => e.remove())
             document.querySelectorAll('.ru').forEach(e => e.remove())
-
 
             hints = document.querySelector('.hints')
             hints.appendChild(elementP)

@@ -4,8 +4,83 @@
 
 {% block content %}
 
+
+<div class="main">
+    <div class="profile">
+        <div class="info">
+            <div class="head-info">
+                <h3>Профиль {{user|title}}:</h3>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
+                    Настройки
+                  </button>
+            </div>
+            <div class="first-section">        
+                <canvas id="ChartWeek"></canvas>
+                <canvas id="ChartLearned"></canvas>
+                <canvas id="ChartLearned2"></canvas>
+                <div class="static">
+                    <p>Статистика слов:</p> 
+                    {% for stage, count in study_words.items %}
+                    <p class="info-words">{{stage}}: {{count}}</p>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="second-section">
+                <div class="form-year">
+                    <svg width="1000" height="500" xmlns="http://www.w3.org/2000/svg">
+                    </svg>
+                </div>
+                <div class="achieves">
+                    <div class="cicle">Круги Ближайшие достижения</div>
+                    <div class="cicle">Круги Ближайшие достижения</div>
+                    <div class="cicle">Круги Ближайшие достижения</div>
+                    <div class="cicle">Круги Ближайшие достижения</div>
+                    <div class="cicle">Круги Ближайшие достижения</div>
+                    <div class="cicle">Круги Ближайшие достижения</div>
+                </div>
+            </div>
+        </div>                         
+    </div>
+
+    <div class="modal" id="myModal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Настройки</h5>
+            </div>
+            <div class="modal-body">
+                <p>
+                    Ублюдок, мать твою, а ну иди сюда, говно собачье, решил меня настроить? 
+                    Ты, засранец вонючий, мать твою, а? Ну иди сюда, попробуй меня изменить,
+                    я тебя сам изменю, будь ты проклят!
+                </p>
+                <p>
+                    Я тут зря старался делал для тебя всё это, чтобы ты пришел и изменял?
+                    Закрой окно и забудь про эту кнопку! Гадёныш неблагодарный!
+                </p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal">Извиниться</button>
+              <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Измениться</button>
+            </div>
+          </div>
+        </div>
+      </div>
+</div>
+{% load static %}
+<script src="{% static 'js/activity-week.js' %}"></script>
+<script src="{% static 'js/learned-for-1000.js' %}"></script>
+<script src="{% static 'js/learned-all.js' %}"></script>
+<script src="{% static 'js/activity-year.js' %}"></script>
 {% endblock %}
 
 {% block domready %}
+
+const activity = {{ activity|safe }};
+const static = {{ study_words|safe }}
+drawChartWeek(activity)
+drawChartLearned(static)
+drawChartLearnedAll(static)
+generateYearCalendar(2024,activity);
 
 {% endblock %}

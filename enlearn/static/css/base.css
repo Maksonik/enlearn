@@ -38,7 +38,19 @@ body {
     padding: 50px;
     padding-top: 50px;
     width: 1000px;
+    display: flex;
+    flex-direction: column;
     background-color: white;
+    justify-content: center;
+    align-items: center;
+}
+
+.block-detail-word {
+    padding: 50px;
+    padding-top: 50px;
+    width: 1000px;
+    background-color: white;
+    justify-content: center;
 }
 
 .learning {
@@ -54,6 +66,7 @@ body {
 .word {
     position: relative;
     margin-bottom: 10px;
+    text-align: center;
 }
 
 .more {
@@ -87,6 +100,7 @@ sub {
 .transcription {
     font-family: 'transcription';
     font-size: 20px;
+    color: grey;
 }
 
 .forms-word {
@@ -153,13 +167,55 @@ sub {
     border-radius: 25px;
     height: 525px;
     padding: 25px;
+    width: 75%;
+    height: 70%;
+    min-width: 50%;
+    min-height: 500px;
 }
 
 .name-b {
     display: flex;
-    justify-content:space-between;
+    flex: 1;
+    justify-content: space-around;
     flex-direction: column;
     align-items: center;
+}
+
+.name-b > * {
+    font-size: 1rem;
+    margin: 10px;
+ 
+}
+
+.name-r {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    text-align: center;
+    
+}
+
+.name-r > h4 {
+    color: grey;
+    font-weight: 400;
+    font-family: 'transcription';
+}
+
+.form-example{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    
+}
+
+.form-example > * {
+    font-size: 1.2rem;
+    font-weight: 400
+}
+
+.form-example > .translate {
+    color: grey;
 }
 
 .big-text {
@@ -181,9 +237,12 @@ sub {
 }
 
 .buttuns > button {
-    min-width: 300px;
-    
+    flex: 1;
+    margin: 10px;
+    flex-grow: 1;
 }
+
+
 
 .big {
     font-size: 30px;
@@ -277,4 +336,107 @@ sub {
 
 .indent {
     text-indent: 20px;
+}
+
+.profile {
+    padding: 80px;
+    padding-top: 50px;
+    padding-bottom: 10px;
+    height: 100%;
+    width: 1000px;
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    background-color: white;
+    justify-content: space-between;
+    
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.first-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 300px;
+}
+
+.form-week {
+    width: 600px;
+    height: 330px;
+}
+
+
+.static {
+    border: black solid 2px;
+    padding: 10px;
+    text-align: center;
+    justify-content: center;
+    width: 200px;
+}
+
+.static > :first-child {
+    font-size: 20px;
+}
+
+.info-words {
+    margin: 3px;
+}
+
+.second-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.form-year {
+    border: grey solid 1px;
+    border-radius: 10px;
+    height: 300px;
+    width: 1000px;
+    min-width: 1000px;
+    text-align: center;
+}
+
+.day {
+    cursor: pointer;
+    stroke: black;
+    stroke-width: 1px;
+}
+
+.achieves {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-around;
+}
+
+.cicle {
+    border: black solid 2px;
+    border-radius: 20px;
+    padding: 20px;
+    width: 150px;
+    height: 150px;
+}
+
+.head-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.month-label {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+svg {
+    width: 100%;
+    height: 100%;
 }

@@ -3,15 +3,33 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.http import JsonResponse
 from account.models import StudyWord
 from word.models import Word
-from word.serializers import WordSerializer
 from datetime import datetime
+from account.views import get_user_actions_for_day,get_user_actions_for_all_days
 import json
 import pytz
 
 
 def profile(request):
+    user = request.user
+    activity = get_user_actions_for_all_days(user)
+    study_word_count_for_stage = get_study_word_count_for_stage(user)
+    print(study_word_count_for_stage)
     return render(request,
-                  'profile/profile.html')
+                  'profile/profile.html',
+                  {'user' : user,
+                   'activity' : activity,
+                   'study_words': study_word_count_for_stage})
+    
+def get_study_word_count_for_stage(user):
+    words = StudyWord.objects.filter(learner__user=user)
+    return {'Слова на 1 этапе' : len(words.filter(stage_learning_word='Learning_0_stage')),
+            'Слова на 2 этапе' : len(words.filter(stage_learning_word='Learning_1_stage')),
+            'Слова на 3 этапе' : len(words.filter(stage_learning_word='Learning_2_stage')),
+            'Слова на 4 этапе' : len(words.filter(stage_learning_word='Learning_3_stage')),
+            'Слова на 5 этапе' : len(words.filter(stage_learning_word='Learning_4_stage')),
+            'Слова на 6 этапе' : len(words.filter(stage_learning_word='Learning_5_stage')),
+            'Выучено слов' : len(words.filter(stage_learning_word='Learned')),
+            'Всего слов' : len(words)}
 
 
 def exercises(request):
@@ -38,8 +56,6 @@ def get_all_studywords(request):
     words_data = json.dumps(list(words.values()), cls=DjangoJSONEncoder)
     return JsonResponse({'data' : words_data}, content_type='application/json', safe=False)
 
-
-    
 
 def finished(request):
     return render(request,

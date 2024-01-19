@@ -15,8 +15,10 @@
             <input type="text" class="form-control w-100 biathlon">
             <div class="name-b">
                 <h4 class="short-description">Short description</h3>
-                <h4 class="sentense">translate</h4>
-                <h4 class="translate">translate</h4>
+                <div class="form-example">
+                    <h4 class="sentense">translate</h4>
+                    <h4 class="translate">translate</h4>
+                </div>
             </div>
             <div class="hints"></div>
             <div class="buttuns">
@@ -46,28 +48,77 @@ async function getInfoWord(word) {
     return data
 }
 
+async function getExample(word) {
+    let example
+    try {
+        example = word.examples[0].example
+    } catch {
+        try {
+            example = word.phrases[0].phrase
+        } catch {
+            example = 'Нету предложения'
+        }
+    }
+    return example
+}
+
+async function getTranslate(word) {
+    let translate
+    try {
+        translate = word.examples[0].translate
+    } catch {
+        try {
+            translate = word.phrases[0].translate
+        } catch {
+            translate = 'Нету перевода'
+        }
+    }
+    return translate
+}
+
 // Устанавливает информацию на сайте
 async function setInfoWord(word) {
     let short_description = document.querySelector('h4.short-description')
     let sentense = document.querySelector('h4.sentense')
     let translate = document.querySelector('h4.translate')
+    let transcription = document.querySelector('h4.transcription')
+    let wordName = document.querySelector('h4.word')
+    let input = document.querySelector('input.biathlon')
+
     console.log(word.name)
+
+    wordName.textContent = '???'
+    transcription.textContent = ''
+    input.value = ''
 
     short_description.textContent = word.short_description
 
-    textSentense = word.examples[1].example.replace(word.name, ' .... ')
+    let wordExample = await getExample(word)
+    let wordTranslate = await getTranslate(word)
+
+    textSentense = wordExample.replace(new RegExp(word.name, "i"),  ' .... ')
 
     sentense.textContent = textSentense
-    translate.textContent = word.examples[1].translate
+    translate.textContent = wordTranslate
 }
 
 async function help(word) {
     let transcription = document.querySelector('h4.transcription')
     let sentense = document.querySelector('h4.sentense')
 
-    sentense.textContent = word.examples[0].example
+    let wordExample = await getExample(word)
+
+    sentense.textContent = wordExample
     transcription.textContent = word.sounds[0].transcription
 }
+
+document.addEventListener('keydown', async (e) => {
+    let searchInput = document.querySelector('input')
+    if (/^[a-zA-Z]$/.test(e.key) && !e.ctrlKey && !e.altKey && !e.metaKey && !e.shiftKey && e.target !== searchInput) {
+        let input = document.querySelector('input.biathlon');
+        input.focus();
+    }
+})
 
 
 
@@ -76,7 +127,6 @@ async function wordWithWords() {
     let jsonWords = await getWords()
     if (inc >= jsonWords.length) {
         // редирект если слов больше нет
-        console.log('срабатывает')
         window.location.href = '{% url "learning:finished" %}'
     }
     let info = await getInfoWord(jsonWords[inc])
@@ -84,10 +134,8 @@ async function wordWithWords() {
 
     async function nextWord() {
         inc += 1
-        console.log(inc, jsonWords.length)
         if (inc >= jsonWords.length) {
             // редирект если слов больше нет
-            console.log('срабатывает')
             window.location.href = '{% url "learning:finished" %}'
         }
         info = await getInfoWord(jsonWords[inc])
@@ -109,6 +157,7 @@ async function wordWithWords() {
 
     let btnHelp = document.querySelector('.help') 
     btnHelp.addEventListener('click', async (e) => {
+        console.log(info)
         await help(info)
     })
 
