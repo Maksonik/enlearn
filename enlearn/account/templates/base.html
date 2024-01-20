@@ -8,7 +8,6 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/base.css' %}" />
     <link rel="icon" href="/media/images/logo.png" type="image/x-icon" />
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -23,7 +22,7 @@
       href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap"
       rel="stylesheet"
     />
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
   <body>
     <ul class="nav bg-dark p-2 flex-nowrap">
@@ -66,9 +65,18 @@
       {% endif %}
     </ul>
     {% block content %}
-
     <div class="main">
       <div class="block">
+        {% if messages %}
+        <div class="notifications">
+            {% for message in messages %}
+            <div class="notification alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message|safe }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
         <div class="center-text">
           <h3 class="big-text">Welcome to enlearn</h3>
           <p class="left-text indent">

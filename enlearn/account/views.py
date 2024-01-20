@@ -7,6 +7,7 @@ from django.conf import settings
 from .models import StudyWord, Learner
 from word.models import Word
 
+
 from datetime import datetime, timedelta
 import redis
 import json
@@ -44,14 +45,12 @@ def get_user_actions_for_all_days(user):
 
     return result if result else None
     
-def _get_day():
+def _get_day(offset=0):
     now_in_moscow = pytz.timezone('Europe/Moscow').localize(datetime.now())
-    day = now_in_moscow.strftime("%Y-%m-%d")
-    return day
+    previous_day = now_in_moscow - timedelta(days=abs(offset))
+    return previous_day.strftime("%Y-%m-%d")
 
 def view_base(request):
-    print(get_user_actions_for_day(request.user, _get_day()))
-    print(get_user_actions_for_all_days(request.user))
     return render(request,
                   'base.html', )
 

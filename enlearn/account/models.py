@@ -24,8 +24,8 @@ class Learner(models.Model):
 
 
 class StudyWord(models.Model):
-    word = models.ForeignKey(Word, related_name='learning_word',on_delete=models.CASCADE)
-    learner = models.ForeignKey(Learner, on_delete=models.CASCADE)
+    word = models.ForeignKey(Word,on_delete=models.CASCADE)
+    learner = models.ForeignKey(Learner, related_name='learning_word', on_delete=models.CASCADE)
     stage_learning_word = models.CharField(choices=[
         ('Learning_0_stage', 'Learning_0_stage'),
         ('Learning_1_stage', 'Learning_1_stage'),

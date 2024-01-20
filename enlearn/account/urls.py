@@ -9,5 +9,5 @@ urlpatterns = [
     path('', views.view_base, name='dashboard'),
     path('change-level-word/', views.change_level_word, name='change_level_word'),
     path('create_study_word/', views.create_study_word, name='create_study_word'),
-     path('check_study_word/', views.check_study_word, name='check_study_word'),
+    path('check_study_word/', views.check_study_word, name='check_study_word'),
 ]

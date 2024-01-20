@@ -41,7 +41,6 @@ body {
     display: flex;
     flex-direction: column;
     background-color: white;
-    justify-content: center;
     align-items: center;
 }
 
@@ -408,20 +407,72 @@ sub {
     stroke-width: 1px;
 }
 
-.achieves {
+.achieve {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    align-items: flex-start;
-    justify-content: space-around;
+    text-align: center;
+    
 }
 
-.cicle {
-    border: black solid 2px;
-    border-radius: 20px;
-    padding: 20px;
-    width: 150px;
-    height: 150px;
+.achieve > h3 {
+    height: 50px;
+}
+
+.achieves {
+    display: flex;
+    margin: 20px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content:last baseline;
+    flex-grow: 1;
+
+}
+
+.achieves_received, .achieves_unreceived  {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+
+.block-achieves {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: space-between;;
+
+}
+
+.block-achieves > .achieves {
+    align-items: flex-start;  
+}
+
+.unpic {
+    filter: saturate(25%);
+}
+
+.min-pic {
+    width: 100px;
+    height: 100px;
+}
+
+.min-pic > img {
+    width: 100px;
+    height: 100px;
+}
+
+.max-pic {
+    width: 200px;
+    height: 200px;
+}
+
+.max-pic > img {
+    width: 200px;
+    height: 200px;
 }
 
 .head-info {
@@ -439,4 +490,49 @@ sub {
 svg {
     width: 100%;
     height: 100%;
+}
+
+.notifications {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.notification {
+    border: none;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+}
+
+.notification:hover {
+    transform: translateY(-2px);
+}
+
+.alert-primary {
+    background-color: #cce5ff;
+    color: #004085;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.alert-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+.alert-warning {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
 }

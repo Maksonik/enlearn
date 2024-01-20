@@ -1,24 +1,30 @@
 from django.shortcuts import render
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import JsonResponse
-from account.models import StudyWord
+from account.models import StudyWord, Learner
 from word.models import Word
+from achieve.models import AchieveLearner, Achieve
 from datetime import datetime
-from account.views import get_user_actions_for_day,get_user_actions_for_all_days
+from account.views import get_user_actions_for_all_days
 import json
 import pytz
-
+from achieve.views import set_new_achieves_for_user
 
 def profile(request):
     user = request.user
+    set_new_achieves_for_user(request)
     activity = get_user_actions_for_all_days(user)
     study_word_count_for_stage = get_study_word_count_for_stage(user)
-    print(study_word_count_for_stage)
+    user_achieves = AchieveLearner.objects.filter(user=Learner.objects.get(user=user))
+    all_achieves = Achieve.objects.all()
+    achieves_unreceived = all_achieves.exclude(id__in=user_achieves.values_list('achievement__id', flat=True))
     return render(request,
                   'profile/profile.html',
                   {'user' : user,
                    'activity' : activity,
-                   'study_words': study_word_count_for_stage})
+                   'study_words': study_word_count_for_stage,
+                   'user_achieves':user_achieves,
+                   'achieves_unreceived' : achieves_unreceived})
     
 def get_study_word_count_for_stage(user):
     words = StudyWord.objects.filter(learner__user=user)
@@ -55,8 +61,3 @@ def get_all_studywords(request):
                                      time_learning__lt=pytz.timezone('Europe/Moscow').localize(datetime.now()))
     words_data = json.dumps(list(words.values()), cls=DjangoJSONEncoder)
     return JsonResponse({'data' : words_data}, content_type='application/json', safe=False)
-
-
-def finished(request):
-    return render(request,
-                  'exercises/finished.html')

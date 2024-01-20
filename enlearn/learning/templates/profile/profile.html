@@ -7,6 +7,16 @@
 
 <div class="main">
     <div class="profile">
+        {% if messages %}
+        <div class="notifications">
+            {% for message in messages %}
+            <div class="notification alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message|safe }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
         <div class="info">
             <div class="head-info">
                 <h3>Профиль {{user|title}}:</h3>
@@ -30,13 +40,20 @@
                     <svg width="1000" height="500" xmlns="http://www.w3.org/2000/svg">
                     </svg>
                 </div>
-                <div class="achieves">
-                    <div class="cicle">Круги Ближайшие достижения</div>
-                    <div class="cicle">Круги Ближайшие достижения</div>
-                    <div class="cicle">Круги Ближайшие достижения</div>
-                    <div class="cicle">Круги Ближайшие достижения</div>
-                    <div class="cicle">Круги Ближайшие достижения</div>
-                    <div class="cicle">Круги Ближайшие достижения</div>
+                <div class="achieve">
+                    <h3 style="width: 100%;">Достижения:<sup><a href="{% url 'achieve:list_achieve'%}">все</a></sup></h3>
+                    <div class="achieves">
+                        {% for user_acvive in user_achieves|slice:":3"%}
+                        <div class="min-pic" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="{{user_acvive.achievement.title}}<br>{{user_acvive.achievement.description}}">
+                            <img src="{{user_acvive.achievement.image.url}}" >
+                        </div>
+                        {% endfor %}
+                        {% for achieve_unreceived in achieves_unreceived|slice:":5" %}
+                        <div class="min-pic unpic" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="{{achieve_unreceived.title}}<br>{{achieve_unreceived.description}}">
+                            <img src="{{ achieve_unreceived.image.url }}">
+                        </div>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>                         
@@ -67,6 +84,12 @@
         </div>
       </div>
 </div>
+<script>
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+  </script>
 {% load static %}
 <script src="{% static 'js/activity-week.js' %}"></script>
 <script src="{% static 'js/learned-for-1000.js' %}"></script>

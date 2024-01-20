@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Завершение{% endblock %}
+
+{% block content %}
+
+
+<div class="main">
+    <div class="block">
+        {% if messages %}
+        <div class="notifications">
+            {% for message in messages %}
+            <div class="notification alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message|safe }}
+                <!-- Используем иконку Bootstrap в кнопке -->
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        <div class="block-achieves">
+            <h3>Все достижения</h3>
+            <div class="achieves">
+                {% for user_acvive in user_achieves%}
+                <div class="max-pic" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="{{user_acvive.achievement.title}}<br>{{user_acvive.achievement.description}}">
+                    <img src="{{user_acvive.achievement.image.url}}">
+                </div>
+                {% endfor %}
+                {% for achieve_unreceived in achieves_unreceived %}
+                <div class="max-pic unpic" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="{{achieve_unreceived.title}}<br>{{achieve_unreceived.description}}">
+                    <img src="{{ achieve_unreceived.image.url }}">
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+  </script>
+{% endblock %}

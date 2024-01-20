@@ -15,7 +15,7 @@ urlpatterns = [
     path('', include('account.urls')),
     path('words/', include('word.urls', namespace='words')),
     path('learning/', include('learning.urls', namespace='learning')),
-    
+    path('achieve/',include('achieve.urls', namespace='achieve')),
     path('api/v1/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]

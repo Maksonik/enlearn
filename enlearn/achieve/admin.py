@@ -3,7 +3,7 @@ from achieve.models import Achieve, AchieveLearner
 
 @admin.register(Achieve)
 class AchieveAdmin(admin.ModelAdmin):
-    list_display = ('title', 'description','image')
+    list_display = ('title', 'description','image', )
 
 
 

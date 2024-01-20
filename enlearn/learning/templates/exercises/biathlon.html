@@ -127,7 +127,7 @@ async function wordWithWords() {
     let jsonWords = await getWords()
     if (inc >= jsonWords.length) {
         // редирект если слов больше нет
-        window.location.href = '{% url "learning:finished" %}'
+        window.location.href = '{% url "learning:exercises" %}'
     }
     let info = await getInfoWord(jsonWords[inc])
     await setInfoWord(info)
@@ -136,7 +136,7 @@ async function wordWithWords() {
         inc += 1
         if (inc >= jsonWords.length) {
             // редирект если слов больше нет
-            window.location.href = '{% url "learning:finished" %}'
+            window.location.href = '{% url "learning:exercises" %}'
         }
         info = await getInfoWord(jsonWords[inc])
         return info
