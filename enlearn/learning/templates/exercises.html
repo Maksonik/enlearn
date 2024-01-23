@@ -44,15 +44,18 @@
         </ul>
     </p>
     </p>
-    <div class="notes">
+    <div class="notes w-100">
       <h2>Предложения для изучения:</h2>
-      <div class="words d-flex flex-wrap min-max-w">
-        {% for word in words %}
-        <span class="min-w-120"><a href="{% url 'words:word_detail'%}?word={{word.name}}" class="word-click" target="_blank">{{word.name}}</a>
-        </span>
-        {% endfor %}
+      <div class="words row">
+          {% for word in words %}
+          <div class="col-1 mb-1">
+              <span>
+                  <a href="{% url 'words:word_detail'%}?word={{word.name}}" class="word-click" target="_blank">{{word.name}}</a>
+              </span>
+          </div>
+          {% endfor %}
       </div>
-    </div>
+  </div>
   </div>
 </div>
 {% endblock %} 

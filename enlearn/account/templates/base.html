@@ -6,7 +6,9 @@
     {% bootstrap_css %} 
     {% bootstrap_javascript %}
     {% load static %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/adaptive.css' %}" />
     <link rel="icon" href="/media/images/logo.png" type="image/x-icon" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,59 +16,58 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-      rel="stylesheet"
-    />
+      rel="stylesheet"/>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap"
-      rel="stylesheet"
-    />
+      rel="stylesheet"/>
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
   <body>
-    <ul class="nav bg-dark p-2 flex-nowrap">
-      <li class="nav-item flex-grow-1">
-        <a class="nav-link link-light text-center" href="/">Главная</a>
-      </li>
-      <li class="nav-item w-50 flex-grow-1">
-        <div class="search_box">
-          <form id="searchForm" method="get" action="{% url 'words:word_detail' %}">
-            <div class="input-group">
-              <input type="text" class="form-control" placeholder="Поиск" name="word" id="word"/>
-              <div class="input-group-append">
-                <button class="btn btn-outline-success btn-outline-secondary" type="submit">
-                  Искать
-                </button>
-              </div>
-            </div>
-          </form>
-          <div class="word_tips"></div>
-        </div>
-      </li>
-      {% if not request.user.is_authenticated %}
-      <li class="nav-item flex-grow-1 text-center">
-        <a class="nav-link link-light" href="{% url 'login' %}">Войти</a>
-      </li>
-      {% else %}
-      <li class="nav-item flex-grow-1 text-center">
-        <a class="nav-link link-light" href="{% url 'learning:profile' %}"
-          >Профиль</a
-        >
-      </li>
-      <li class="nav-item flex-grow-1 text-center">
-        <a class="nav-link link-light" href="{% url 'learning:exercises' %}"
-          >Упражения</a
-        >
-      </li>
-      <li class="nav-item flex-grow-1 text-center">
-        <a class="nav-link link-light" href="{% url 'logout' %}">Выйти</a>
-      </li>
-      {% endif %}
-    </ul>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark p-1">
+      <div class="container-fluid  justify-content-around">
+          <a class="navbar-brand" href="/">Главная</a>
+          <ul class="navbar-nav w-75">
+            <li class="nav-item w-100 search-box">
+                <form class="form-inline w-100 d-flex nowrap" method="get" action="{% url 'words:word_detail' %}">
+                    <input class="form-control" type="text" placeholder="Поиск" name="word" id="word" />
+                    <button class="btn btn-outline-success" type="submit">Искать</button>
+                </form>
+                <div class="word_tips"></div>
+            </li>
+          </ul>
+          {% if request.user.is_authenticated %}
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+              <ul class="navbar-nav m-2">
+                  <li class="nav-item text-end pe-5">
+                      <a class="nav-link" href="{% url 'learning:profile' %}">Профиль</a>
+                  </li>
+                  <li class="nav-item text-end pe-5">
+                      <a class="nav-link" href="{% url 'learning:exercises' %}">Упражнения</a>
+                  </li>
+                  <li class="nav-item text-end pe-5">
+                      <a class="nav-link" href="{% url 'logout' %}">Выйти</a>
+                  </li>
+              </ul>
+          </div>
+          {% endif %}
+          {% if not request.user.is_authenticated %}
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'login' %}">Войти</a>
+            </li>
+          </ul>
+          {% endif %}
+      </div>
+  </nav>
+  
     {% block content %}
     <div class="main">
-      <div class="block">
+      <div class="block ">
         {% if messages %}
         <div class="notifications">
             {% for message in messages %}

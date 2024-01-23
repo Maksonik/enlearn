@@ -37,45 +37,58 @@ function getValueForDay(data, activity) {
 }
 
 
-function generateYearCalendar(year,activity) {
-    const data = activity
-    const svgCode = [];
-    const monthWidth = 80; // Ширина блока месяца
+function generateYearCalendar(year, activity) {
+    const svgElement = document.querySelector('svg');
+    svgElement.innerHTML = ''; // Очищаем содержимое SVG
+
+    const svgNS = "http://www.w3.org/2000/svg";
+    const svgCode = document.createElementNS(svgNS, 'g');
+
+    const monthWidth = 75;
     const dayWidth = 10;
     const dayHeight = 10;
-    const monthSpacing = 0; // Интервал между месяцами
+    const monthSpacing = 0;
 
     let xStart = 20;
     let yStart = 120;
-    svgCode.push(`<text x="500" y="50" class="year" text-anchor="middle" font-size="25">Активность за ${year} год</text>`)
+
     for (let month = 0; month < 12; month++) {
         const days = daysInMonth(month, year);
         const firstDayOfWeek = getFirstDayOfWeek(month, year);
         const weeks = Math.ceil((days + firstDayOfWeek) / 7);
 
-        svgCode.push(`<g class="month ${month + 1}" transform="translate(${xStart},${yStart})">`);
-        svgCode.push(`<text x="40" y="-12" class="month" text-anchor="middle">${getMonthName(month,year)}</text>`);
+        const monthGroup = document.createElementNS(svgNS, 'g');
+        monthGroup.setAttribute('class', `month ${month + 1}`);
+        monthGroup.setAttribute('transform', `translate(${xStart},${yStart})`);
+        monthGroup.innerHTML = `<text x="40" y="-12" class="month" text-anchor="middle">${getMonthName(month, year)}</text>`;
 
         for (let dayOfWeek = 0; dayOfWeek < 7; dayOfWeek++) {
             for (let week = 0; week < weeks; week++) {
                 const day = week * 7 + dayOfWeek - firstDayOfWeek + 1;
 
                 if (day > 0 && day <= days) {
-                    const value = getValueForDay(`${year}-${(month + 1).toString().padStart(2, '0')}-${day}`,  data);
+                    const value = getValueForDay(`${year}-${(month + 1).toString().padStart(2, '0')}-${day}`, activity);
                     const color = getColorForValue(value);
-                    svgCode.push(`<rect x="${week * (dayWidth + 3)}" y="${dayOfWeek * (dayHeight + 3)}" width="${dayWidth}" height="${dayHeight}"  rx="2" ry="2" class="day" fill="${color}"></rect>`);
+                    const rect = document.createElementNS(svgNS, 'rect');
+                    rect.setAttribute('x', `${week * (dayWidth + 3)}`);
+                    rect.setAttribute('y', `${dayOfWeek * (dayHeight + 3)}`);
+                    rect.setAttribute('width', `${dayWidth}`);
+                    rect.setAttribute('height', `${dayHeight}`);
+                    rect.setAttribute('rx', '2');
+                    rect.setAttribute('ry', '2');
+                    rect.setAttribute('class', 'day');
+                    rect.setAttribute('fill', color);
+                    monthGroup.appendChild(rect);
                 }
             }
         }
 
-        svgCode.push('</g>');
-
+        svgCode.appendChild(monthGroup);
         xStart += monthWidth + monthSpacing;
     }
 
-    document.querySelector('svg').innerHTML = svgCode.join('');
+    svgElement.appendChild(svgCode);
 }
-
 
 
 

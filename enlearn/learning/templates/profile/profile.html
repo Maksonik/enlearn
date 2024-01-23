@@ -24,21 +24,25 @@
                     Настройки
                   </button>
             </div>
-            <div class="first-section">        
-                <canvas id="ChartWeek"></canvas>
-                <canvas id="ChartLearned"></canvas>
-                <canvas id="ChartLearned2"></canvas>
+            <div class="first-section">
+                <div class="ChartWeek">
+                    <canvas id="ChartWeek" ></canvas>
+                </div>       
+                <div class="ChartLearned">
+                    <canvas id="ChartLearned"></canvas>
+                </div>
+                <div class="ChartLearned2">
+                    <canvas id="ChartLearned2"></canvas>
+                </div>
                 <div class="static">
-                    <p>Статистика слов:</p> 
+                    <p>Статистика слов:</p>   
                     {% for stage, count in study_words.items %}
                     <p class="info-words">{{stage}}: {{count}}</p>
                     {% endfor %}
                 </div>
-            </div>
-            <div class="second-section">
                 <div class="form-year">
-                    <svg width="1000" height="500" xmlns="http://www.w3.org/2000/svg">
-                    </svg>
+                    <h3>Активность за 2024 год</h3>
+                    <svg id="mySvg" xmlns="http://www.w3.org/2000/svg" overflow="visible" viewBox="-10 50 950 150"></svg>
                 </div>
                 <div class="achieve">
                     <h3 style="width: 100%;">Достижения:<sup><a href="{% url 'achieve:list_achieve'%}">все</a></sup></h3>
@@ -55,7 +59,7 @@
                         {% endfor %}
                     </div>
                 </div>
-            </div>
+            </div> 
         </div>                         
     </div>
 
@@ -89,7 +93,20 @@
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
       return new bootstrap.Tooltip(tooltipTriggerEl)
     })
-  </script>
+</script>
+<script>
+    var svgElement = document.getElementById('mySvg');
+
+    // Функция для обновления viewBox
+    function updateViewBox() {
+        var newViewBox = window.innerWidth < 1000 ? "-300 50 1225 150" : "-180 50 1120 150";
+        svgElement.setAttribute('viewBox', newViewBox);
+    }
+
+    // Вызываем функцию при загрузке страницы и при изменении размера окна
+    window.addEventListener('load', updateViewBox);
+    window.addEventListener('resize', updateViewBox);
+</script>
 {% load static %}
 <script src="{% static 'js/activity-week.js' %}"></script>
 <script src="{% static 'js/learned-for-1000.js' %}"></script>
@@ -105,5 +122,4 @@ drawChartWeek(activity)
 drawChartLearned(static)
 drawChartLearnedAll(static)
 generateYearCalendar(2024,activity);
-
 {% endblock %}

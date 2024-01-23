@@ -1,0 +1,175 @@
+/* Custom, iPhone Retina */
+@media only screen and (min-width: 320px) {
+    .ChartWeek {
+        min-width: 100%;
+    } 
+
+    .ChartLearned {
+        min-width: 33%;
+    }
+
+    .ChartLearned2 {
+        min-width: 33%;
+    }
+
+    .profile {
+        padding-right: 0px;
+        padding-left: 0px;
+    }
+
+    .words {
+        height: 600px;
+        padding: 0px;
+        font-size: small;
+    }
+
+    .big {
+        font-size: 20px;
+        margin: 5px;
+        padding: 5px;
+        width: auto;
+        height: 70px;
+    }
+
+    .word-click {
+        color: black;
+        text-decoration: none;
+        padding: 0px;
+    }
+
+    .form {
+        width: 95%;
+        height: 98%;
+        border: none;
+    }
+
+    .block {
+        padding: 2px;
+        padding-top: 25px;
+    }
+
+    .block-ach {
+        padding: 2px;
+        padding-top: 25px;
+    }
+
+    .form-year {
+        height: 150px;
+    }
+
+    .form-year svg {
+        transform: scale(2);
+    }
+} 
+
+@media only screen and (min-width: 450px) {
+    .form-year {
+        height: 200px;
+    }
+    
+}  
+
+@media only screen and (min-width: 700px) {
+    .words {
+        height: 480px;
+        font-size: medium;
+    }
+    .form-year {
+        height: 250px;
+    }
+
+    .block {
+        padding: 50px;
+    }
+
+    .block-ach {
+        padding: 50px;
+    }
+
+    .form {
+        border: 2px solid;
+    }
+    
+}
+
+/* Small Devices, Tablets */
+@media only screen and (min-width: 1000px) {
+    .profile {
+        padding-right: 20px;
+        padding-left: 20px;
+    }
+
+    .form-year {
+        min-width: 1000px;
+        height: 300px;
+    }
+
+    .form-year svg {
+        transform: scale(1.5);
+    }
+
+    .words {
+        height: 310px;
+    }
+
+    .big {
+        font-size: 20px;
+        margin: 25px;
+        padding: 15px;
+        width: auto;
+        height: auto;
+    }
+
+    .word-click {
+        color: black;
+        text-decoration: none;
+        padding: 5px;
+    }
+
+    .form {
+        width: 75%;
+        height: 70%;
+        min-width: 50%;
+        min-height: 500px;
+    }
+}
+
+/* Medium Devices, Desktops */
+@media only screen and (min-width: 1360px) {
+    .ChartWeek {
+        min-width: 600px;
+    } 
+
+    .ChartLearned {
+        min-width: 300px;
+    }
+
+    .ChartLearned2 {
+        min-width: 300px;
+    }
+
+    .profile {
+        padding-right: 80px;
+        padding-left: 80px;
+    }
+
+    .form-year {
+        min-width: 1200px;
+        height: 300px;
+    }
+
+}
+
+/* Large Devices, Wide Screens */
+@media only screen and (min-width: 1570px ) {
+    .achieve {
+        max-width: 350px;
+    }
+}
+
+
+
+
+
+
+
