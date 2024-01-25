@@ -34,7 +34,7 @@ def word_detail(request):
 def word_list(request):
     """Cписок слов по запрошенной подстроки"""
     if request.method == 'GET':
-        text = request.GET.get('text', '')
+        text = request.GET.get('text', '').strip().lower()
         if text == '':
             return JsonResponse({'error': 'Nothing transferred', 'words': ''})
 

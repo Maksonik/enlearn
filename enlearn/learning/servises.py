@@ -1,9 +1,11 @@
 # Работа с данными
 import json
 from datetime import datetime
-
+import re
 import pytz
+
 from django.core.serializers.json import DjangoJSONEncoder
+from django.db.models import Q
 
 from account.models import StudyWord
 from word.models import Word
@@ -24,7 +26,9 @@ def _get_study_word_count_for_stage(user):
 
 def _words_for_exercises(user):
     """Выдать 100 слов, которые можно начать учить"""
-    all_words = Word.objects.order_by('rank')
+    all_words = Word.objects.exclude(Q(rank='0') | Q(rank__regex=r'[a-zA-Z]'))
+    all_words = all_words.order_by('rank')
+   
     learning_words = StudyWord.objects.filter(learner__user=user)
     remaining_words = all_words.exclude(id__in=learning_words.values_list('word', flat=True))[:100]
     return remaining_words

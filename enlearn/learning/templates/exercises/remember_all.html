@@ -38,7 +38,8 @@ async function getWords() {
 
 // Получает подробную инфу о слове
 async function getInfoWord(word) {
-    let response = await fetch(`http://127.0.0.1:8000/api/v1/words/${word.word_id}`)
+    const currentDomain = window.location.origin;
+    let response = await fetch(`${currentDomain}/api/v1/words/${word.word_id}`)
     let data = await response.json()
     return data
 }
