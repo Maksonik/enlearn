@@ -134,7 +134,7 @@
     }
 
     async function CreateStudyWord(wordName) {
-        const url = '{% url "create_study_word" %}';
+        const url = '{% url "learning:create_study_word" %}';
         const data = {
             word: wordName
         }
@@ -150,7 +150,7 @@
     }
 
     async function checkWord(word) {
-        const url = '{% url "check_study_word" %}';
+        const url = '{% url "learning:is_study_word" %}';
         const data = {
             word: word
         }

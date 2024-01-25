@@ -1,7 +1,5 @@
 from django.contrib import admin
-from django import forms
 from .models import Word, Description, Sound, Phrase, Form, Example
-
 
 
 class DescriptionInline(admin.TabularInline):
@@ -20,7 +18,6 @@ class FormInline(admin.TabularInline):
 
 class PhraseInline(admin.TabularInline):
     model = Phrase
-
 
 
 @admin.register(Word)
@@ -50,9 +47,7 @@ class PhraseAdmin(admin.ModelAdmin):
     pass
 
 
-
 @admin.register(Example)
 class ExampleAdmin(admin.ModelAdmin):
     list_display = ('example', 'translate')
     raw_id_fields = ['words']
-

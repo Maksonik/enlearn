@@ -1,7 +1,6 @@
 import requests
 from django.core.files.base import ContentFile
 from django.db import models
-from django.urls import reverse
 
 PART_OF_SPEECH = [
     ("adjectival", 'adjectival'),
@@ -13,6 +12,8 @@ PART_OF_SPEECH = [
     ('other', 'other'),
     ('pretext', 'pretext'),
     ('interjection', 'interjection'),
+    ('article', 'article'),
+    ('irregular verb', 'irregular verb'),
 ]
 
 
@@ -23,16 +24,13 @@ def sound_path(instance, filename):
 class Word(models.Model):
     name = models.CharField(max_length=255, unique=True)
     short_description = models.CharField(max_length=1000, blank=True, null=True)
-    rank = models.IntegerField(default=22000, blank=True, null=True)
+    rank = models.CharField(default='22000', blank=True, null=True)
 
     class Meta:
         ordering = ['name', 'rank']
 
     def __str__(self):
         return self.name
-
-
-
 
 
 class Example(models.Model):
@@ -77,7 +75,7 @@ class Sound(models.Model):
     def save(self, *args, **kwargs):
         if self.link and not self.sound:
             try:
-                r = requests.get(sepklf.link)
+                r = requests.get(self.link, verify=False)
                 self.sound.save(self.link.split("/")[-1], ContentFile(r.content), save=False)
             except Exception as e:
                 print('Ошибка', e)

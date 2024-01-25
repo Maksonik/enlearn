@@ -88,7 +88,7 @@ async function getTranslate(word) {
 }
 
 async function ChangeLevelWord(wordName, change) {
-    const url = '{% url "change_level_word" %}';
+    const url = '{% url "learning:change_level_word" %}';
     const data = {
         level: change,
         word: wordName

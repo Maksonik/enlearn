@@ -6,17 +6,17 @@ from achieve.models import AchieveLearner
 class AchieveLearnerInline(admin.TabularInline):
     model = AchieveLearner
     extra = 1
-    readonly_fields = ('user','achievement','achievement_date')
+    readonly_fields = ('user', 'achievement', 'achievement_date')
+
 
 class StudyWordInline(admin.TabularInline):
     model = StudyWord
     extra = 1
     raw_id_fields = ('word',)
-    readonly_fields = ('created', 'updated','time_learning')
+    readonly_fields = ('created', 'updated', 'time_learning')
 
 
 @admin.register(Learner)
 class LearnerAdmin(admin.ModelAdmin):
     list_display = ('user',)
-    inlines = [AchieveLearnerInline,StudyWordInline]
-
+    inlines = [AchieveLearnerInline, StudyWordInline]

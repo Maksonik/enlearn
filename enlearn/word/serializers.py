@@ -1,5 +1,5 @@
-# serializers.py
 from rest_framework import serializers
+from django.db import IntegrityError
 from .models import Word, Description, Sound, Phrase, Form, Example
 
 
@@ -42,7 +42,7 @@ class WordSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Word
-        fields = ['pk','name', 'short_description', 'rank', 'descriptions', 'sounds', 'phrases', 'forms', 'examples']
+        fields = ['pk', 'name', 'short_description', 'rank', 'descriptions', 'sounds', 'phrases', 'forms', 'examples']
 
     def create(self, validated_data):
         """
@@ -52,6 +52,11 @@ class WordSerializer(serializers.ModelSerializer):
         sounds_data = validated_data.pop('sounds', [])
         phrases_data = validated_data.pop('phrases', [])
         forms_data = validated_data.pop('forms', [])
+
+        # Проверка существования слова
+        existing_word = Word.objects.filter(name=validated_data['name']).first()
+        if existing_word:
+            raise IntegrityError("Слово с таким названием уже существует.")
 
         word = Word.objects.create(**validated_data)
 
@@ -68,8 +73,8 @@ class WordSerializer(serializers.ModelSerializer):
             word.forms.add(Form.objects.create(word=word, **form_data))
 
         return word
-    
-    
+
+
 class WordSerializerExample(serializers.ModelSerializer):
     class Meta:
         model = Word
@@ -84,6 +89,7 @@ class ExampleSerializer(serializers.ModelSerializer):
         fields = ['example', 'translate', 'words']
 
     def create(self, validated_data):
+        """ Добавить слова, которые есть в базе к примеру """
         example = Example.objects.create(**validated_data)
 
         for word in validated_data['example'].split(' '):

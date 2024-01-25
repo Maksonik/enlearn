@@ -3,8 +3,7 @@ from django.contrib.auth.models import User
 from word.models import Word
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
-from datetime import timedelta,datetime
-
+from datetime import timedelta, datetime
 
 DAYS = {
     'Learning_0_stage': 0,
@@ -24,7 +23,7 @@ class Learner(models.Model):
 
 
 class StudyWord(models.Model):
-    word = models.ForeignKey(Word,on_delete=models.CASCADE)
+    word = models.ForeignKey(Word, on_delete=models.CASCADE)
     learner = models.ForeignKey(Learner, related_name='learning_word', on_delete=models.CASCADE)
     stage_learning_word = models.CharField(choices=[
         ('Learning_0_stage', 'Learning_0_stage'),
@@ -38,7 +37,7 @@ class StudyWord(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     time_learning = models.DateTimeField(null=True)
-    
+
     class Meta:
         unique_together = ('word', 'learner')
 
@@ -53,5 +52,6 @@ def update_time_learning(sender, instance, **kwargs):
             instance.time_learning = None
         else:
             instance.time_learning = instance.updated + timedelta(days=DAYS[instance.stage_learning_word])
+
 
 pre_save.connect(update_time_learning, sender=StudyWord)

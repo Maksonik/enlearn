@@ -19,6 +19,12 @@
               {{ form.username.errors }}
             </div>
             <div class="form-group">
+              <label for="{{ form.email.id_for_label }}">Email</label>
+                 </br>
+              {{ form.email }}
+              {{ form.email.errors }}
+            </div>
+            <div class="form-group">
               <label for="{{ form.password1.id_for_label }}">Пароль</label>
                 </br>
               {{ form.password1 }}
