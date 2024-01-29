@@ -1,0 +1,11 @@
+services:
+  web:
+    build: .
+    command: python /code/enlearn/manage.py runserver 0.0.0.0:8000
+    restart: always
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    environment:
+      - DJANGO_SETTINGS_MODULE=enlearn.settings.prod

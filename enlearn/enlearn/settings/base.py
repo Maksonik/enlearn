@@ -1,11 +1,11 @@
 import os
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 SECRET_KEY = 'django-insecure-#jcm3+3efsd&1pq)9)+0u9r_-a1us8^ue-6rr2n)6&@z^n2d38'
 
-DEBUG = True
+# DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -58,16 +58,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'enlearn.wsgi.application'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'enlearn',
-        'USER': 'maksonik',
-        'PASSWORD': '123456789',
-        'HOST': 'localhost',
-        'PORT': '',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'enlearn',
+#         'USER': 'maksonik',
+#         'PASSWORD': '123456789',
+#         'HOST': 'localhost',
+#         'PORT': '',
+#     }
+# }
 
 AUTH_PASSWORD_VALIDATORS = [
     {
