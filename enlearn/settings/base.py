@@ -5,7 +5,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 SECRET_KEY = 'django-insecure-#jcm3+3efsd&1pq)9)+0u9r_-a1us8^ue-6rr2n)6&@z^n2d38'
 
-# DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -58,16 +57,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'enlearn.wsgi.application'
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'enlearn',
-#         'USER': 'maksonik',
-#         'PASSWORD': '123456789',
-#         'HOST': 'localhost',
-#         'PORT': '',
-#     }
-# }
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -96,11 +85,9 @@ USE_I18N = True
 
 USE_TZ = True
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
-
 STATIC_URL = 'static/'
+
+STATIC_ROOT = BASE_DIR / 'static'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
@@ -125,6 +112,7 @@ REST_FRAMEWORK = {
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
+
 
 REDIS_HOST = 'localhost'
 REDIS_PORT = 6379

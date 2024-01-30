@@ -24,7 +24,7 @@ def sound_path(instance, filename):
 class Word(models.Model):
     name = models.CharField(max_length=255, unique=True)
     short_description = models.CharField(max_length=1000, blank=True, null=True)
-    rank = models.CharField(default='22000', blank=True, null=True)
+    rank = models.CharField(default='22000', max_length=100,blank=True, null=True)
 
     class Meta:
         ordering = ['name', 'rank']
@@ -48,7 +48,7 @@ class Description(models.Model):
     word = models.ForeignKey(Word,
                              related_name='descriptions',
                              on_delete=models.CASCADE)
-    part_of_speech = models.CharField(choices=PART_OF_SPEECH)
+    part_of_speech = models.CharField(choices=PART_OF_SPEECH, max_length=200)
     general_meaning = models.CharField(max_length=255, blank=True, null=True)
     deep_meaning = models.CharField(max_length=255, blank=True, null=True)
     translate = models.CharField(max_length=255, blank=True, null=True)
@@ -64,7 +64,7 @@ class Sound(models.Model):
     region = models.CharField(choices=[
         ("UK", 'United Kingdom'),
         ('US', 'United States'),
-    ], verbose_name='region')
+    ], verbose_name='region', max_length=200)
     transcription = models.CharField(max_length=255, blank=True, null=True)
     link = models.URLField(blank=True, null=True)
     sound = models.FileField(upload_to=sound_path, blank=True, null=True)
@@ -97,6 +97,6 @@ class Form(models.Model):
     word = models.ForeignKey(Word,
                              related_name='forms',
                              on_delete=models.CASCADE)
-    part_of_speech = models.CharField(choices=PART_OF_SPEECH)
+    part_of_speech = models.CharField(choices=PART_OF_SPEECH, max_length=200)
     condition = models.CharField(max_length=255, blank=True)
     value = models.CharField(max_length=255, blank=True)

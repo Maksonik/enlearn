@@ -33,7 +33,7 @@ class StudyWord(models.Model):
         ('Learning_4_stage', 'Learning_4_stage'),
         ('Learning_5_stage', 'Learning_5_stage'),
         ('Learned', 'Learned'),
-    ], default='Learning_0_stage')
+    ], default='Learning_0_stage', max_length=200)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     time_learning = models.DateTimeField(null=True)

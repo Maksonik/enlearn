@@ -1,7 +1,25 @@
 services:
+
+  db:
+    image: postgres:14.5
+    restart: always
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+     - POSTGRES_DB=postgres
+     - POSTGRES_USER=postgres
+     - POSTGRES_PASSWORD=postgres
+
+  cache:
+    image: redis
+    restart: always
+    volumes:
+      - ./data/cache:/data
+
   web:
     build: .
-    command: python /code/enlearn/manage.py runserver 0.0.0.0:8000
+    command: ["./wait-for-it.sh", "db:5432", "--",
+              "uwsgi", "--ini", "/code/config/uwsgi/uwsgi.ini"]
     restart: always
     volumes:
       - .:/code
@@ -9,3 +27,18 @@ services:
       - "8000:8000"
     environment:
       - DJANGO_SETTINGS_MODULE=enlearn.settings.prod
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    depends_on:
+      - db
+      - cache
+
+  nginx:
+    image: nginx:1.23.1
+    restart: always
+    volumes:
+      - ./config/nginx:/etc/nginx/templates
+      - .:/code
+    ports:
+      - "80:80"
