@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404
 from django.http import Http404
 
 from rest_framework import viewsets
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAdminUser, AllowAny
 
 from .services import _get_description, _get_form, _get_dict_words_with_short_description
 from .models import Word, Example
@@ -53,7 +53,11 @@ class WordViewSet(viewsets.ModelViewSet):
 
     queryset = Word.objects.all()
     serializer_class = WordSerializer
-    permission_classes = [IsAdminUser]
+
+    def get_permissions(self):
+        if self.action == 'retrieve':
+            return [AllowAny()]
+        return [IsAdminUser()]
 
 
 class ExampleViewSet(viewsets.ModelViewSet):
@@ -61,4 +65,7 @@ class ExampleViewSet(viewsets.ModelViewSet):
 
     queryset = Example.objects.all()
     serializer_class = ExampleSerializer
-    permission_classes = [IsAdminUser]
+    def get_permissions(self):
+        if self.action == 'retrieve':
+            return [AllowAny()]
+        return [IsAdminUser()]
