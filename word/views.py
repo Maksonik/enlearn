@@ -38,7 +38,7 @@ def word_list(request):
         if text == '':
             return JsonResponse({'error': 'Nothing transferred', 'words': ''})
 
-        words = Word.objects.filter(name__startswith=text)
+        words = Word.objects.filter(name__startswith=text)[:10]
         directory = _get_dict_words_with_short_description(words)
         try:
             return JsonResponse({'success': True, 'words': directory})
