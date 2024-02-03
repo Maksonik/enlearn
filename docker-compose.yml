@@ -5,10 +5,8 @@ services:
     restart: always
     volumes:
       - ./data/db:/var/lib/postgresql/data
-    environment:
-     - POSTGRES_DB=postgres
-     - POSTGRES_USER=postgres
-     - POSTGRES_PASSWORD=postgres
+    env_file:
+     - .env
 
   cache:
     image: redis
@@ -25,11 +23,10 @@ services:
       - .:/code
     ports:
       - "8000:8000"
+    env_file:
+     - .env
     environment:
       - DJANGO_SETTINGS_MODULE=enlearn.settings.prod
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
     depends_on:
       - db
       - cache
@@ -40,5 +37,8 @@ services:
     volumes:
       - ./config/nginx:/etc/nginx/templates
       - .:/code
+      - ./certbot/conf/fullchain.pem:/etc/nginx/ssl/fullchain.pem:ro
+      - ./certbot/conf/privkey.pem:/etc/nginx/ssl/privkey.pem:ro    
     ports:
       - "80:80"
+      - "443:443"

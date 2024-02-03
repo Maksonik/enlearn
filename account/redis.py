@@ -6,9 +6,8 @@ import redis
 from django.conf import settings
 
 
-r = redis.Redis(host=settings.REDIS_HOST,
-                port=settings.REDIS_PORT,
-                db=settings.REDIS_DB)
+r = redis.Redis.from_url(settings.CACHES['default']['LOCATION'])
+
 
 def _get_day(offset=0):
     """Получить день в формате год-месяц-день"""
