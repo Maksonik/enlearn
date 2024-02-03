@@ -1,15 +1,23 @@
-upstream uwsgi_app {
-    server unix:/code/uwsgi_app.sock;
-}
 server {
     listen 80;
-    server_name www.en-learn.com en-learn.com;
+    server_name en-learn.ru www.en-learn.ru;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name en-learn.ru www.en-learn.ru;
+
+    ssl_certificate /etc/nginx/ssl/fullchain.pem;
+    ssl_certificate_key /etc/nginx/ssl/privkey.pem;
+
     error_log  stderr warn;
     access_log  /dev/stdout main;
+    client_max_body_size 20M;
 
     location / {
         include /etc/nginx/uwsgi_params;
-        uwsgi_pass  uwsgi_app;
+        uwsgi_pass  web:8000;
     }
 
     location /static/ {
